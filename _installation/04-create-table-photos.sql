@@ -5,8 +5,9 @@ CREATE TABLE IF NOT EXISTS 'photos' (
  'created_at' timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
  'updated_at' timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
  PRIMARY KEY ('photos_id'),
- UNIQUE KEY 'user_name' ('user_name'),
- UNIQUE KEY 'user_email' ('user_email')
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-/** FOREIGN KEY A FAIRE , J'AI PLUS LA SYNTAXE MYSQL EN TETE */
+ALTER TABLE photos
+ADD CONSTRAINT fk_user
+FOREIGN KEY (user_id)
+REFERENCES users(user_id)
