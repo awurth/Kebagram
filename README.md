@@ -1,4 +1,4 @@
-<h1> KEBOGRAM </h1>
+<h1> KEBAGRAM </h1>
 
 Web application shamefully inspired by Instagram, but this time for KEBABS !
 <br/><br/>
