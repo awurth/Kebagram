@@ -39,6 +39,16 @@ class User extends Model
     }
 
     /**
+    * The user has one photo.
+    *
+    * @return mixed
+    */
+    public function photo(){
+        return $this->hasOne('\App\Models\Photo');
+    }
+
+
+    /**
     * Check if the user has a valid subscription
     *
     * @return bool
