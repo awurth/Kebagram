@@ -1,5 +1,5 @@
 vendor/*
 log/*
 cache/*
-resources/database.sqlite
+*.ini
 .DS_Store
