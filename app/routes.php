@@ -8,18 +8,6 @@ use App\Middleware\GuestMiddleware;
 use App\Middleware\AdminMiddleware;
 use App\Middleware\SubscriberMiddleware;
 
-// // Render a view immediately from routes.php with and arguments
-// $app->get('/@{username}', function ($request, $response, $args) {
-//     return $this->view->render($response, 'profiles/index.twig', ['username' => $args['username']]);
-//     // return 'Hello ' . $args['user'] .', nice to meet you!';
-// });
-
-/* json example for API */
-$app->get('/json', function ($request, $response){
-    $data = array('user_name' => 'John Doe','email' => 'john.doe@example.com');
-    return $response->withJson($data);
-});
-
 $app->get('/', 'HomeController:index')->setName('home');
 
 $app->get('/@{user_name}', 'ProfileController:getIndex'); //alpha & numeric
