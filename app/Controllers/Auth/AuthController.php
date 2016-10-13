@@ -94,7 +94,8 @@ class AuthController extends Controller
         $validation = $this->validator->validate($request, [
             'user_email' => v::noWhitespace()->notEmpty()->email()->emailAvailable(),
             'user_name' => v::noWhitespace()->notEmpty()->alpha(),
-            'user_password' => v::noWhitespace()->notEmpty(),
+            'user_password' => v::noWhitespace()->notEmpty()->length(6),
+            'user_password_confirm' => v::equals($request->getParam('user_password')),
             'op' => v::equals('reg'),
         ]);
 
@@ -111,6 +112,7 @@ class AuthController extends Controller
         $user = User::create([
             'user_email' => $request->getParam('user_email'),
             'user_name' => $request->getParam('user_name'),
+            'user_slug' => strtolower($request->getParam('user_name')),
             'user_password_hash' => password_hash($request->getParam('user_password'), PASSWORD_DEFAULT),
         ]);
 

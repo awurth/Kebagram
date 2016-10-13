@@ -31,6 +31,13 @@
                                 <span class="help-block">{{ errors.user_password | first }}</span>
                             {% endif %}
                         </div>
+                        <div class="form-group{{ errors.user_password ? ' has-error' : '' }}">
+                            <label for="user_password_confirm">Password</label>
+                            <input type="password" name="user_password_confirm" id="user_password_confirm" class="form-control">
+                            {% if errors.user_password %}
+                                <span class="help-block">{{ errors.user_password | first }}</span>
+                            {% endif %}
+                        </div>
                         <button type="submit" class="btn btn-primary">Sign up</button>
 
                         {{ csrf.field | raw }}
