@@ -1,7 +1,7 @@
-{% extends 'templates/app.twig' %}
-{% block title %}View all notes{% endblock %}
+{% extends 'layout.twig' %}
+{% block title %}{{ parent() }} - View all notes{% endblock %}
 
-{% block content %}
+{% block body %}
 
     <div class="panel panel-default">
         <div class="panel-heading">Enter your note text</div>

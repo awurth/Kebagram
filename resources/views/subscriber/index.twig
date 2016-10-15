@@ -1,7 +1,7 @@
-{% extends 'templates/app.twig' %}
-{% block title %}Quiz time!{% endblock %}
+{% extends 'layout.twig' %}
+{% block title %}{{ parent() }} - Quiz time!{% endblock %}
 
-{% block content %}
+{% block body %}
 
 	{% if signed_in is sameas(false) %}
 		<div class="row">
