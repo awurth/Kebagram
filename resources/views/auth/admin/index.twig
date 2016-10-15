@@ -1,7 +1,7 @@
-{% extends 'templates/app.twig' %}
-{% block title %}Admin interface{% endblock %}
+{% extends 'layout.twig' %}
+{% block title %}{{ parent() }} - Admin interface{% endblock %}
 
-{% block content %}
+{% block body %}
 <div class="jumbotron">
 	<h2>This is the admin interface, only visibel for admins.</h2>
 </div>

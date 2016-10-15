@@ -1,48 +1,9 @@
-{% extends 'templates/app.twig' %}
-{% block title %}Homepage{% endblock %}
+{% extends 'layout.twig' %}
 
-{% block content %}
-  <div class="jumbotron">
-	  <p>This is a example of a TwigExtension: {{ diffForHumans("2016-06-01 16:07:46") }}</p>
-	  <p>Under "App/TwigExtension" you can have a look at the "diffForHumans" extension.</p>
-	  <p>And that function in then to be found in "App/helper.php".Don´t forget to add the extension in "bootstrap/dependencies.php". Like so: "$view->addExtension (new App\TwigExtension\diffForHumans());"</p>
-	  <hr>
+{% block body %}
 
-<h2>Boilerplate Progress</h2>
-	<ul>
-		<li><s>File structure</s></li>
-		<li><s>Separate settings file</s></li>
-		<li>FluentPDO insted of Eloquent(?)</li>
-		<li>Dotenv configuration</li>
-		<li>Remember me</li>
-		<li><s>Prepare all user input statements (eloquent does this behind the scene)</s></li>
-		<li>Password reset</li>
-		<li>Notification system. Admins can push notifications to users</li>
-		<li>Common APP feedback-messages, located in one [lang] file</li>
-		<li>Failed-login-throttling and failed-password-change-throttling</li>
-		<li><s>User profile {{ base_url() }}/@{username}</s></li>
-			<ul>
-				<li>More informative user profile</li>
-				<li>Public/non public profile</li>
-				<li>User not found Exception</li>
-			</ul>
-		<li>Dashboard
-			<ul>
-				<li><s>Simple CRUD example</s></li>
-			</ul>
-		</li>
-		<li>Admin area
-			<ul>
-				<li><s>View all user</s></li>
-				<li><s>Soft delete user</s></li>
-				<li><s>Ban user</s></li>
-				<li>View how much of ban time that is left</li>
-			</ul>
-		</li>
-		<li>Feedback when trying to sign-in on a banned/deleted account</li>
-		<li>Sign-out user if the user is deleted or banned</li>
-	</ul>
-
+<div class="jumbotron">
+	<h1>Homepage</h1>
 </div>
 
 {% endblock %}

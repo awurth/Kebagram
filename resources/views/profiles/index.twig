@@ -1,6 +1,6 @@
-{% extends 'templates/app.twig' %}
-{% block title %}{{ user.user_name }}{% endblock %}
-{% block content %}
+{% extends 'layout.twig' %}
+{% block title %}{{ parent() }} - {{ user.user_name }}{% endblock %}
+{% block body %}
     <div class="row">
         <div class="col-md-6">
 			¯\_(ツ)_/¯ <br>
