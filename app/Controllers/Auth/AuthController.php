@@ -112,7 +112,7 @@ class AuthController extends Controller
         $user = User::create([
             'user_email' => $request->getParam('user_email'),
             'user_name' => $request->getParam('user_name'),
-            'user_slug' => strtolower($request->getParam('user_name')),
+            'user_slug' => $this->generateSlug($request->getParam('user_name')),
             'user_password_hash' => password_hash($request->getParam('user_password'), PASSWORD_DEFAULT),
         ]);
 
@@ -129,7 +129,18 @@ class AuthController extends Controller
     /**
     * Render dashboard
     */
-    public function dashboard($request, $response){
+    public function dashboard($request, $response)
+    {
         return $this->view->render($response, 'auth/dashboard/dashboard.twig');
+    }
+
+    public function generateSlug($text)
+    {
+        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+        $text = trim($text, '-');
+        $text = preg_replace('~[^A-Za-z0-9.]+~', '-', $text);
+        $text = strtolower($text);
+
+        return $text;
     }
 }
