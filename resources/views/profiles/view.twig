@@ -1,0 +1,51 @@
+{% extends 'layout.twig' %}
+
+{% block title %}{{ parent() }} - {{ user.user_name }}{% endblock %}
+
+{% block body %}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="row">
+            <div class="col-xs-12 panel profile-header">
+                <div class="avatar">
+                    <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=300%C3%97300&w=300&h=300"
+                         alt="Avatar" class="img-circle">
+                </div>
+                <div class="profile-info">
+                    <h2>
+                        {{ user.user_name }}
+                        {% if auth.check and auth.user.user_id == user.user_id %}
+                            <a href="#" class="btn btn-primary">Edit</a>
+                        {% endif %}
+                    </h2>
+                    <ul class="list-unstyled list-inline">
+                        <li><strong>82</strong> posts</li>
+                        <li><strong>5483</strong> followers</li>
+                        <li><strong>147</strong> following</li>
+                    </ul>
+                    <div class="profile-desc">
+                        <span class="profile-name">Firstname</span>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 panel profile-photos">
+                <div class="row">
+                    {% for photo in photos %}
+                        {# if loop.index0 % 3 == 0 %}<div class="photos-row">{% endif #}
+                        <div class="col-xs-4 photo">
+                            <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=640%C3%97640&w=640&h=640"
+                                 alt="Photo">
+                        </div>
+                        {# if loop.index % 3 == 0 %}</div>{% endif #}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
