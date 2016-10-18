@@ -10,7 +10,7 @@ use App\Middleware\SubscriberMiddleware;
 
 $app->get('/', 'HomeController:index')->setName('home');
 
-$app->get('/@{user_name}', 'ProfileController:getIndex'); //alpha & numeric
+$app->get('/user/{slug}', 'ProfileController:view')->setName('user.profile');
 
 $app->group('', function () {
     $this->get('/signup', 'AuthController:getSignUp')->setName('auth.signup');
