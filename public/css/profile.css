@@ -39,8 +39,14 @@
 
 .photo {
     margin-bottom: 10px;
+
 }
 
 .photo > img {
     width: 100%;
+}
+
+.photo > img:hover {
+    box-shadow: 0 0 5px #CCCCCC;
+    cursor: pointer;
 }
