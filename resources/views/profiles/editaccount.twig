@@ -1,0 +1,76 @@
+{% extends 'layout.twig' %}
+{% block title %}{{ parent() }} - {{ user.user_name }}{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+
+
+
+        <div class="well" >
+            <h2>  <i class="material-icons md-48">account_circle</i> My account</h2>
+
+            <table class="table">
+                <thead>
+                <tr>
+                  <td></td>
+                </tr>
+
+                </thead>
+                <tbody>
+
+                <tr>
+                    <th style="width:20%">Joined </th>
+                    <td>{{ user.created_at | date("m/d/Y") }}</td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <th style="width:20%">Username</th>
+                    <td>{{ user.user_name }}</td>
+                    <td style="text-align:right">Edit</td>
+                </tr>
+                <tr>
+                    <th style="width:20%">Email</th>
+                    <td>{{ user.user_email }}</td>
+                    <td style="text-align:right">Edit</td>
+                </tr>
+                <tr>
+                    {% if edit == "password" %}
+                        <th style="width:20%">Password</th>
+                        <td>
+
+                            <div class="col-md-5">
+                                <form action="saveEdit" method="POST" id="form">
+                                    <input type="hidden" name="what" value="password">
+                                    <input type="password" placeholder="New password" class="form-control" id="1" name="password1">
+                                    <input type="password" placeholder="Confirm" class="form-control" id="2" name="password2">
+                                    {{ csrf.field | raw }}
+                                    <input type="submit"   form="form" class="pull-right btn btn-primary" value="Save" >
+                                </form>
+                           </div>
+
+                        </td>
+                        <td>  </td>
+                    {% else %}
+                        <th style="width:20%">Password</th>
+                        <td> &#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226; </td>
+                        <td style="text-align:right"> <a href="?what=password">Edit</a></td>
+                    {% endif %}
+                </tr>
+
+
+
+
+
+                </table>
+
+
+
+
+        </div>
+
+    </div>
+
+
+{% endblock %}

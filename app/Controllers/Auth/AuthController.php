@@ -2,12 +2,14 @@
 
 namespace App\Controllers\Auth;
 
+use App\Auth\Auth;
 use App\Models\User;
 use App\Controllers\Controller;
 use Respect\Validation\Validator as v;
 
 class AuthController extends Controller
 {
+
 
     /**
     * Render sign-in page
@@ -74,6 +76,7 @@ class AuthController extends Controller
         return $this->view->render($response, 'signup.twig');
     }
 
+
     /**
     * Register a new user
     *
@@ -132,4 +135,7 @@ class AuthController extends Controller
     public function dashboard($request, $response){
         return $this->view->render($response, 'auth/dashboard/dashboard.twig');
     }
+
+
+
 }

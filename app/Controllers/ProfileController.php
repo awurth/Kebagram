@@ -29,4 +29,58 @@ class ProfileController extends Controller
     }
 
 
+    public function editAccount($request, $response) {
+
+        $id = $this->auth->user()->user_id;
+        $edit = NULL;
+
+        if (isset($_GET)) { $edit = $_GET['what']; }
+
+        return $this->view->render($response, 'profiles/editaccount.twig',["user" => User::find($id),"edit" => $edit]);
+    }
+
+
+    private function passwordMatches($p,$p2){
+        return ( ($p == $p2) && size($p) > 6);
+    }
+
+    public function saveEdit($request,$response) {
+
+        if (isset($_POST)) {
+
+            switch( $request->getParam('what') ) {
+
+                case "password" :
+
+                    $mdp = $request->getParam('password');
+                    $mdp2 = $request->getParam('password2');
+
+                    if ($this->passwordMatches($mdp,$mdp2)) {
+                        $user = User::find($this->auth->user()->user_id);
+                        $user->user_password_hash = password_hash($mdp, PASSWORD_DEFAULT);
+                        $user->save();
+                        $this->flash->addMessage('info', 'Your password was changed');
+                    }else{
+                        $this->flash->addMessage('error', 'Error, your password needs at least 6 characters');
+                    }
+
+                    return $response->withRedirect($this->router->pathFor("edit.account"));
+                break;
+
+                default:
+
+                    return $response->withRedirect($this->router->pathFor("home"));
+
+            }
+
+
+        }
+
+
+
+
+    }
+
+
+
 }

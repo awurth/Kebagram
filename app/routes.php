@@ -23,6 +23,10 @@ $app->group('', function () {
 $app->group('', function () {
     $this->get('/signout', 'AuthController:getSignOut')->setName('auth.signout');
 
+    $this->get('/me', 'ProfileController:editAccount')->setName('edit.account');
+
+    $this->post('/saveEdit', 'ProfileController:saveEdit')->setName('saveEdit.account');
+
     $this->get('/password/change', 'PasswordController:getChangePassword')->setName('auth.password.change');
     $this->post('/password/change', 'PasswordController:postChangePassword');
 
@@ -30,7 +34,8 @@ $app->group('', function () {
 
     $this->get('/notes', 'NoteController:index')->setName('notes');
     $this->post('/notes', 'NoteController:newNote')->setName('new.note');
-    
+
+
     $this->get('/notes/{note_id:[0-9]+}', 'NoteController:getEditNote');
     $this->put('/notes/{note_id:[0-9]+}', 'NoteController:postEditNote')->setName('edit.note');
     $this->get('/notes/deleteNote/{note_id:[0-9]+}', 'NoteController:deleteNote')->setName('delete.note');
