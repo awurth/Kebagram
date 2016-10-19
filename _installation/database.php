@@ -38,7 +38,7 @@ Manager::schema()->create('users', function (Blueprint $table) {
     $table->timestamps();
 });
 
-Manager::schema()->create('photos', function (Blueprint $table) {
+Manager::schema()->create('picture', function (Blueprint $table) {
     $table->increments('id');
     $table->text('description');
     $table->text('url');
