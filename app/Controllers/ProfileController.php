@@ -17,7 +17,7 @@ class ProfileController extends Controller
 
         return $this->view->render($response, 'profiles/view.twig', [
             'user' => $user,
-            'photos' => array(1, 2)
+            'photos' => array(1, 2, 3, 4)
         ]);
     }
 
