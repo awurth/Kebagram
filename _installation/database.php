@@ -12,23 +12,33 @@ $capsule->addConnection($config['settings']['db']);
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
 
-Manager::schema()->drop('photos');
-Manager::schema()->drop('users');
+Manager::schema()->dropIfExists('photos');
+Manager::schema()->dropIfExists('users');
 
 Manager::schema()->create('users', function (Blueprint $table) {
-    $table->increments('id');
-    $table->string('username')->unique();
-    $table->string('slug')->unique();
-    $table->string('email')->unique();
-    $table->string('password');
+    $table->increments('user_id');
+    $table->string('session_id', 48)->nullable();
+    $table->string('user_name', 64)->unique();
+    $table->string('user_slug', 64)->unique();
+    $table->string('user_password_hash');
+    $table->string('user_email')->unique();
+    $table->boolean('user_active');
+    $table->boolean('user_deleted');
+    $table->boolean('user_account_type')->default(1);
+    $table->boolean('user_has_avatar');
+    $table->string('user_remember_me_token', 64)->nullable();
+    $table->bigInteger('user_suspension_timestamp')->nullable();
+    $table->bigInteger('user_last_login_timestamp')->nullable();
+    $table->boolean('user_failed_logins');
+    $table->integer('user_last_failed_login')->nullable();
+    $table->string('user_activation_hash')->nullable();
+    $table->boolean('user_profile')->default(1);
+    $table->string('user_password_reset_hash')->nullable();
+    $table->bigInteger('user_password_reset_timestamp')->nullable();
+
+
     $table->string('name');
     $table->string('description');
-    $table->boolean('active');
-    $table->boolean('deleted');
-    $table->boolean('type');
-    $table->boolean('has_avatar');
-    $table->string('remember_me_token');
-    $table->dateTime('last_login');
     $table->timestamps();
 });
 
@@ -38,5 +48,5 @@ Manager::schema()->create('photos', function (Blueprint $table) {
     $table->text('url');
     $table->timestamps();
     $table->integer('user_id')->unsigned();
-    $table->foreign('user_id')->references('id')->on('users');
+    $table->foreign('user_id')->references('user_id')->on('users');
 });
