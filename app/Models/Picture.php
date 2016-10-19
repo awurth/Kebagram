@@ -3,25 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Auth;
 
-class Photo extends Model {
+class Picture extends Model {
 
-    protected $table = 'photos';
-    protected $primaryKey = 'photo_id';
+    protected $table = 'picture';
 
-    /**
-    * Change the description
-    * @param string $description
-    */
+    protected $primaryKey = 'id';
 
-    public function setDescription($description) {
-        $this->update([
-            'description' => $description
-        ]);
-    }
-
-    public function user(){
+    public function user()
+    {
 		$this->belongsTo('App\User');
 	}
 }
