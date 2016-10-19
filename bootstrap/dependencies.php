@@ -49,12 +49,12 @@ $container['view'] = function ($container) {
 * Custom 404
 * Override the default Not Found Handler
 */
-// $container['notFoundHandler'] = function ($c) {
-//     return function ($request, $response) use ($c) {
-//         $c['view']->render($response, 'errors/404.twig');
-//         return $response->withStatus(404);
-//     };
-// };
+$container['notFoundHandler'] = function ($c) {
+    return function ($request, $response) use ($c) {
+        $c['view']->render($response, 'errors/404.twig');
+        return $response->withStatus(404);
+    };
+};
 
 /**
 * Custom CSRF fail response
