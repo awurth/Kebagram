@@ -102,3 +102,7 @@ $container['ProfileController'] = function ($container) {
 $container['AdminController'] = function ($container) {
     return new \App\Controllers\AdminController($container);
 };
+
+$container['PictureController'] = function ($container) {
+    return new \App\Controllers\PictureController($container);
+};
