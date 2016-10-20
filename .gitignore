@@ -1,5 +1,8 @@
 vendor/*
 log/*
 cache/*
+!cache/.gitkeep
+public/uploads/images/kebabs/*
+!public/uploads/images/kebabs/.gitkeep
 *.ini
 .DS_Store
