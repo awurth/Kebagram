@@ -31,12 +31,9 @@ $app->group('', function () {
     $this->post('/password/change', 'PasswordController:postChangePassword');
 
     $this->get('/dashboard', 'AuthController:dashboard')->setName('dashboard');
-    $this->get('/notes', 'NoteController:index')->setName('notes');
-    $this->post('/notes', 'NoteController:newNote')->setName('new.note');
-    $this->get('/notes/{note_id:[0-9]+}', 'NoteController:getEditNote');
-    $this->put('/notes/{note_id:[0-9]+}', 'NoteController:postEditNote')->setName('edit.note');
-    $this->get('/notes/deleteNote/{note_id:[0-9]+}', 'NoteController:deleteNote')->setName('delete.note');
 
+    $this->get('/pic/add', 'PictureController:getAdd')->setName('picture.add');
+    $this->post('/pic/add', 'PictureController:postAdd');
 })->add(new AuthMiddleware($container));
 
 $app->group('', function () {
