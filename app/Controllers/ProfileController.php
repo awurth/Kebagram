@@ -44,11 +44,36 @@ class ProfileController extends Controller
     }
 
     private function usernameAvailable($username) {
-        if (ctype_space($username) AND User::where('user_name',$username)->first == NULL ) {
-            return true;
+        if (!(ctype_space($username))) {
+            if ( User::where('user_name',$username)->first == NULL ) {
+                $this->flash->addMessage('info', 'Your username has changed');
+                return true;
+            }else{
+                $this->flash->addMessage('error', 'Error, this username is already taken');
+            }
+        }else{
+            $this->flash->addMessage('error', 'Error, this username contains illegal characters');
         }
-        $this->flash->addMessage('error', 'Error, this username contains illegal characters');
         return false;
+    }
+
+
+    private function emailAvailable($email) {
+        if (!(ctype_space($username))) {
+            if ( User::where('user_email',$username)->first == NULL ) {
+                $this->flash->addMessage('info', 'Your email address has changed');
+                return true;
+            }else{
+                $this->flash->addMessage('error', 'Error, this address email is unavailable');
+            }
+        }else{
+            $this->flash->addMessage('error', 'Error, this email address contains illegal characters');
+        }
+        return false;
+    }
+
+    private function me(){
+        return User::find($this->auth->user()->user_id);
     }
 
     public function saveEdit($request,$response) {
@@ -59,7 +84,7 @@ class ProfileController extends Controller
                     $mdp2 = $request->getParam('password2');
                     if ($this->passwordMatches($mdp,$mdp2)) {
                         $this->flash->addMessage('info', 'Your password has changed');
-                        $user = User::find($this->auth->user()->user_id);
+                        $user = $this->me();
                         $user->user_password_hash = password_hash($mdp, PASSWORD_DEFAULT);
                         $user->save();
                     }else{
@@ -70,33 +95,27 @@ class ProfileController extends Controller
 
                case "username":
                         if ( $this->usernameAvailable($request->getParam('username')) ) {
-                            $this->flash->addMessage('info', 'Your username has changed');
-                            $user = User::find($this->auth->user()->user_id);
+                            $user = $this->me();
                             $user->user_name = $request->getParam('username');
                             $user->user_slug = strtolower($user->user_name);
                             $user->save();
-                        }else{
-                            $this->flash->addMessage('error', 'Error, this username is already taken');
                         }
-
-                    return $response->withRedirect($this->router->pathFor("edit.account"));
-
+                        return $response->withRedirect($this->router->pathFor("edit.account"));
                 break;
 
                 case "email":
-                    if ( $this->validator->validate($request,
-                        ['user_name' => v::noWhitespace()->notEmpty()->alpha()]) ) {
-                        if ( User::where('user_name',$username)->first == NULL ) {
-                            $this->flash->addMessage('info', 'Your username has changed');
-                            $user = User::find($this->auth->user()->user_id);
-                            $user->user_name = $request->getParam('username');
-                            $user->slug = strtolower($user->user_name);
-                            $user->save();
-                        }else{ $this->flash->addMessage('error', 'Error, this username is already taken');}
-                    }else{ $this->flash->addMessage('error', 'Error, this username contains illegal characters');}
-
+                    if ( $this->emailAvailable($request->getParam('email')) ) {
+                        $user = $this->me();
+                        $user->user_email = $request->getParam('email');
+                        $user->save();
+                    }
                     return $response->withRedirect($this->router->pathFor("edit.account"));
+                    break;
 
+                case "remove":
+                    $user = $this->me();
+                    $user->delete();
+                    $this->flash->addMessage('info', 'Your account has been successfully deleted');
                     break;
                 // Pas besoin de break puisque le cas trivial (?) est de retourner à la page d'accueil
             }
@@ -105,6 +124,8 @@ class ProfileController extends Controller
 
 
     }
+
+
 
 
 
