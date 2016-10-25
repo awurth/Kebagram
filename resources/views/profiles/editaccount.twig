@@ -4,54 +4,68 @@
 {% block body %}
 
     <div class="row">
-
-
-
         <div class="well" >
-            <h2>  <i class="material-icons md-48">account_circle</i> My account</h2>
-
+            <h2><i class="material-icons md-48">account_circle</i> My account</h2>
             <table class="table">
-                <thead>
-                <tr>
-                  <td></td>
-                </tr>
-
-                </thead>
+                <thead> <tr> <td/></tr> </thead>
                 <tbody>
 
                 <tr>
-                    <th style="width:20%">Joined </th>
+                    <th style="width:20%">Joined</th>
                     <td>{{ user.created_at | date("m/d/Y") }}</td>
                     <td></td>
                 </tr>
 
                 <tr>
-                    <th style="width:20%">Username</th>
-                    <td>{{ user.user_name }}</td>
-                    <td style="text-align:right">Edit</td>
-                </tr>
+                    {% if edit == "username" %}
+                        <th style="width:20%">Username</th>
+                        <td>
+                            <form action="saveEdit" method="POST" id="form">
+                                 <div class="col-md-4">
+                                    <input type="hidden" name="what" value="username">
+                                    <input type="text" placeholder="New username" class="form-control" id="1" name="username">
+                                    {{ csrf.field | raw }}
+                                 </div>
+                                 <div class="pull-left">
+                                     <input type="submit" form="form" class="pull-right btn btn-primary" valu  e="Save" >
+                                 </div>
+                            </form>
+                        </td>
+                        <td/>
+                    {% else %}
+                        <th style="width:20%">Username</th>
+                        <td>{{ user.user_name }}</td>
+                        <td style="text-align:right"><a href="?what=username">Edit</a></td>
+                    {% endif %}
+
+                <tr/>
                 <tr>
                     <th style="width:20%">Email</th>
                     <td>{{ user.user_email }}</td>
-                    <td style="text-align:right">Edit</td>
+                    <td style="text-align:right"><a href="?what=email">Edit</a></td>
                 </tr>
                 <tr>
                     {% if edit == "password" %}
                         <th style="width:20%">Password</th>
                         <td>
-
-                            <div class="col-md-5">
-                                <form action="saveEdit" method="POST" id="form">
+                            <form action="saveEdit" method="POST" id="form">
+                                 <div class="col-md-5">
                                     <input type="hidden" name="what" value="password">
                                     <input type="password" placeholder="New password" class="form-control" id="1" name="password1">
-                                    <input type="password" placeholder="Confirm" class="form-control" id="2" name="password2">
+                                 </div>
+                                 <div class="col-md-5">
+                                    <input type="hidden" name="what" value="password">
+                                    <input type="password" required placeholder="Confirm" class="form-control" id="2" name="password2">
                                     {{ csrf.field | raw }}
-                                    <input type="submit"   form="form" class="pull-right btn btn-primary" value="Save" >
-                                </form>
-                           </div>
+                                  </div>
 
+                                <input type="submit" required form="form" class="pull-right btn btn-primary" value="Save" >
+
+
+
+                            </form>
                         </td>
-                        <td>  </td>
+                        <td/>
                     {% else %}
                         <th style="width:20%">Password</th>
                         <td> &#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226; </td>
@@ -59,11 +73,9 @@
                     {% endif %}
                 </tr>
 
-
-
-
-
                 </table>
+            <br>
+            <p class="text-right"><i class="material-icons">delete_forever</i>Delete my account</p>
 
 
 

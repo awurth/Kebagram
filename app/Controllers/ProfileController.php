@@ -11,7 +11,7 @@ class ProfileController extends Controller
 {
 	/**
 	* Render the users profile.
-    * Have a look at [Laravel Eloquent Ignore Casing](http://stackoverflow.com/q/21213490/4892914)
+        * Have a look at [Laravel Eloquent Ignore Casing](http://stackoverflow.com/q/21213490/4892914)
 	*
 	* @param $args['user_name']
 	*
@@ -39,44 +39,53 @@ class ProfileController extends Controller
         return $this->view->render($response, 'profiles/editaccount.twig',["user" => User::find($id),"edit" => $edit]);
     }
 
-
     private function passwordMatches($p,$p2){
-        return ( ($p == $p2) && size($p) > 6);
+        return ( ($p == $p2) && strlen($p) > 6);
     }
 
     public function saveEdit($request,$response) {
-
         if (isset($_POST)) {
-
             switch( $request->getParam('what') ) {
-
+      
                 case "password" :
-
                     $mdp = $request->getParam('password');
                     $mdp2 = $request->getParam('password2');
-
                     if ($this->passwordMatches($mdp,$mdp2)) {
+                        $this->flash->addMessage('info', 'Your password has changed');
                         $user = User::find($this->auth->user()->user_id);
                         $user->user_password_hash = password_hash($mdp, PASSWORD_DEFAULT);
                         $user->save();
-                        $this->flash->addMessage('info', 'Your password was changed');
                     }else{
                         $this->flash->addMessage('error', 'Error, your password needs at least 6 characters');
                     }
 
                     return $response->withRedirect($this->router->pathFor("edit.account"));
+                    break;
+
+               case "username":
+                    if ($this->validator->validate($request,
+                        ['user_name' => v::noWhitespace()->notEmpty()->alpha()])) {
+
+                        if ( User::where('user_name',$username)->first == NULL ) {
+                            $this->flash->addMessage('info', 'Your username has changed');
+                            $user = User::find($this->auth->user()->user_id);
+                            $user->user_name = $request->getParam('username');
+                            $user->save();
+                        }else{
+                            $this->flash->addMessage('error', 'Error, this username is already taken');
+                        }
+                    }else{
+                        $this->flash->addMessage('error', 'Error, this username contains illegal characters');
+                    }
+
+                    return $response->withRedirect($this->router->pathFor("edit.account"));
+
+
                 break;
-
-                default:
-
-                    return $response->withRedirect($this->router->pathFor("home"));
-
+                // Pas besoin de break puisque le cas trivial (?) est de retourner à la page d'accueil
             }
-
-
         }
-
-
+        return $response->withRedirect($this->router->pathFor("home"));
 
 
     }
