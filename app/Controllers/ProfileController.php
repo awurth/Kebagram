@@ -43,10 +43,17 @@ class ProfileController extends Controller
         return ( ($p == $p2) && strlen($p) > 6);
     }
 
+    private function usernameAvailable($username) {
+        if (ctype_space($username) AND User::where('user_name',$username)->first == NULL ) {
+            return true;
+        }
+        $this->flash->addMessage('error', 'Error, this username contains illegal characters');
+        return false;
+    }
+
     public function saveEdit($request,$response) {
         if (isset($_POST)) {
             switch( $request->getParam('what') ) {
-      
                 case "password" :
                     $mdp = $request->getParam('password');
                     $mdp2 = $request->getParam('password2');
@@ -58,30 +65,39 @@ class ProfileController extends Controller
                     }else{
                         $this->flash->addMessage('error', 'Error, your password needs at least 6 characters');
                     }
-
                     return $response->withRedirect($this->router->pathFor("edit.account"));
                     break;
 
                case "username":
-                    if ($this->validator->validate($request,
-                        ['user_name' => v::noWhitespace()->notEmpty()->alpha()])) {
-
-                        if ( User::where('user_name',$username)->first == NULL ) {
+                        if ( $this->usernameAvailable($request->getParam('username')) ) {
                             $this->flash->addMessage('info', 'Your username has changed');
                             $user = User::find($this->auth->user()->user_id);
                             $user->user_name = $request->getParam('username');
+                            $user->user_slug = strtolower($user->user_name);
                             $user->save();
                         }else{
                             $this->flash->addMessage('error', 'Error, this username is already taken');
                         }
-                    }else{
-                        $this->flash->addMessage('error', 'Error, this username contains illegal characters');
-                    }
 
                     return $response->withRedirect($this->router->pathFor("edit.account"));
 
-
                 break;
+
+                case "email":
+                    if ( $this->validator->validate($request,
+                        ['user_name' => v::noWhitespace()->notEmpty()->alpha()]) ) {
+                        if ( User::where('user_name',$username)->first == NULL ) {
+                            $this->flash->addMessage('info', 'Your username has changed');
+                            $user = User::find($this->auth->user()->user_id);
+                            $user->user_name = $request->getParam('username');
+                            $user->slug = strtolower($user->user_name);
+                            $user->save();
+                        }else{ $this->flash->addMessage('error', 'Error, this username is already taken');}
+                    }else{ $this->flash->addMessage('error', 'Error, this username contains illegal characters');}
+
+                    return $response->withRedirect($this->router->pathFor("edit.account"));
+
+                    break;
                 // Pas besoin de break puisque le cas trivial (?) est de retourner à la page d'accueil
             }
         }
