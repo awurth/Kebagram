@@ -49,7 +49,7 @@ class PictureController extends Controller
             $picture->user()->associate($this->auth->user());
             $picture->save();
 
-            $this->resize($file->getTempName(), 'uploads/images/kebabs/' . $picture->id . '.' . $file->getExtension());
+            $this->resize($file->getTempName(), 'uploads/images/kebabs/' . $picture->id . '.jpg');
 
             $this->flash->addMessage('success', 'Picture added successfully!');
             return $response->withRedirect($this->router->pathFor('home'));
