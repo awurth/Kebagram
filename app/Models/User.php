@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Auth;
 
 class User extends Model
 {
@@ -35,8 +34,9 @@ class User extends Model
     *
     * @return mixed
     */
-    public function subscription(){
-        return $this->hasOne('\App\Models\Subscription');
+    public function subscription()
+    {
+        return $this->hasOne('App\Models\Subscription');
     }
 
     /**
@@ -44,8 +44,9 @@ class User extends Model
     *
     * @return mixed
     */
-    public function picture(){
-        return $this->hasOne('\App\Models\Picture');
+    public function pictures()
+    {
+        return $this->hasMany('App\Models\Picture');
     }
 
 
@@ -54,7 +55,8 @@ class User extends Model
     *
     * @return bool
     */
-    public function hasSubscription(){
+    public function hasSubscription()
+    {
         $dueDate = new \DateTime(User::find($_SESSION['user_id'])->subscription->due_date);
         $todaysDate = new \DateTime();
 
