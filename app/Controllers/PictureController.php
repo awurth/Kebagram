@@ -2,8 +2,9 @@
 
 namespace App\Controllers;
 
-use App\Models\Picture;
 use Respect\Validation\Validator as v;
+use Intervention\Image\ImageManager;
+use App\Models\Picture;
 use App\Upload\FileUploader;
 use App\Upload\UploadedFile;
 
@@ -48,7 +49,7 @@ class PictureController extends Controller
             $picture->user()->associate($this->auth->user());
             $picture->save();
 
-            $fileUploader->upload($picture->id);
+            $this->resize($file->getTempName(), 'uploads/images/kebabs/' . $picture->id . '.' . $file->getExtension());
 
             $this->flash->addMessage('success', 'Picture added successfully!');
             return $response->withRedirect($this->router->pathFor('home'));
@@ -56,5 +57,16 @@ class PictureController extends Controller
 
         $this->flash->addMessage('error', 'An image file is required.');
         return $response->withRedirect($redirectUrl);
+    }
+
+    public function resize($src, $dest)
+    {
+        $manager = new ImageManager(array('driver' => 'gd'));
+
+        $image = $manager->make($src);
+
+        $size = $image->height() > $image->width() ? $image->height() : $image->width();
+
+        $image->resizeCanvas($size, $size, 'center', false, '#000000')->save($dest);
     }
 }
