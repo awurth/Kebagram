@@ -10,10 +10,9 @@
         </div>
         <div class="navbar-collapse collapse navbar-warning-collapse">
             <ul class="nav navbar-nav">
-                <li><a href="#">Link 1</a></li>
-                <li><a href="#">Link 2</a></li>
                 {% if auth.check %}
                     <li><a href="{{ path_for('dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ path_for('picture.add') }}">Add picture</a></li>
                 {% endif %}
             </ul>
             <ul class="nav navbar-nav navbar-right">

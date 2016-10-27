@@ -40,12 +40,12 @@ class User extends Model
     }
 
     /**
-    * The user has one photo.
+    * The user has one picture.
     *
     * @return mixed
     */
-    public function photo(){
-        return $this->hasOne('\App\Models\Photo');
+    public function picture(){
+        return $this->hasOne('\App\Models\Picture');
     }
 
 
