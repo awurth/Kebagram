@@ -16,7 +16,7 @@
                         {{ user.user_name }}
                         {% if auth.check %}
                             {% if auth.user.user_id == user.user_id %}
-                                <a href="#" class="btn btn-primary">Edit</a>
+                                <a href="{{ path_for('edit.account') }}" class="btn btn-primary">Edit</a>
                             {% else %}
                                 <a href="#" class="btn btn-primary">Follow</a>
                             {% endif %}
@@ -37,11 +37,10 @@
         <div class="row">
             <div class="col-xs-12 panel profile-photos">
                 <div class="row">
-                    {% for photo in photos %}
+                    {% for picture in user.pictures %}
                         {# if loop.index0 % 3 == 0 %}<div class="photos-row">{% endif #}
                         <div class="col-xs-4 photo">
-                            <img src="https://placehold.it/640x640"
-                                 alt="Photo">
+                            <img src="{{ base_url() }}/{{ picture.getWebPath() }}" alt="Photo">
                         </div>
                         {# if loop.index % 3 == 0 %}</div>{% endif #}
                     {% endfor %}
