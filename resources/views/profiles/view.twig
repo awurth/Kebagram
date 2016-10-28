@@ -37,7 +37,7 @@
         <div class="row">
             <div class="col-xs-12 panel profile-photos">
                 <div class="row">
-                    {% for picture in user.pictures %}
+                    {% for picture in pictures %}
                         {# if loop.index0 % 3 == 0 %}<div class="photos-row">{% endif #}
                         <div class="col-xs-4 photo">
                             <img src="{{ base_url() }}/{{ picture.getWebPath() }}" alt="Photo">
@@ -45,6 +45,47 @@
                         {# if loop.index % 3 == 0 %}</div>{% endif #}
                     {% endfor %}
                 </div>
+            </div>
+            <div class="col-xs-12 text-center">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        {% if page > 1 %}
+                            <li>
+                                <a href="{{ path_for('user.profile', {'slug': user.user_slug}) }}?page={{ page - 1 }}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="disabled">
+                                <a href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+
+                        {% for i in 1..pages %}
+                            <li{% if page == i %} class="active"{% endif %}>
+                                <a href="{{ path_for('user.profile', {'slug': user.user_slug}) }}?page={{ i }}">
+                                    {{ i }}
+                                </a>
+                            </li>
+                        {% endfor %}
+
+                        {% if pages > page %}
+                            <li>
+                                <a href="{{ path_for('user.profile', {'slug': user.user_slug}) }}?page={{ page + 1 }}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="disabled">
+                                <a href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>

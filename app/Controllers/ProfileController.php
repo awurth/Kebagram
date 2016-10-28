@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\Picture;
 use App\Models\User;
 use Slim\Exception\NotFoundException;
 
@@ -15,8 +16,25 @@ class ProfileController extends Controller
             throw new NotFoundException($request, $response);
         }
 
+        $page = $request->getParam('page') ? (int) $request->getParam('page') : 1;
+
+        $builder = Picture::where('user_id', $user->user_id);
+        $count = $builder->count();
+
+        $builder->orderBy('created_at', 'desc')->take(9);
+
+        if ($page > 1) {
+            $builder->skip(9 * ($page - 1));
+        }
+
+        $pictures = $builder->get();
+
         return $this->view->render($response, 'profiles/view.twig', [
-            'user' => $user
+            'user' => $user,
+            'pictures' => $pictures,
+            'count' => $count,
+            'pages' => ceil($count / 9),
+            'page' => $page
         ]);
     }
 
