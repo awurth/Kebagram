@@ -106,3 +106,7 @@ $container['AdminController'] = function ($container) {
 $container['PictureController'] = function ($container) {
     return new \App\Controllers\PictureController($container);
 };
+
+$container['SocialController'] = function ($container) {
+    return new \App\Controllers\SocialController($container);
+};
