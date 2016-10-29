@@ -11,15 +11,15 @@ class Auth
     *
     * Fetch with $this->container->auth->check()
     *
-    * @return mixed
+    * @return User
     */
     public function user()
     {
-        if(!empty($_SESSION['user_id']))
-        {
+        if(!empty($_SESSION['user_id'])) {
             return User::find($_SESSION['user_id']);
         }
-        return false;
+
+        return null;
     }
 
     /**
