@@ -34,6 +34,8 @@ $app->group('', function () {
 
     $this->get('/pic/add', 'PictureController:getAdd')->setName('picture.add');
     $this->post('/pic/add', 'PictureController:postAdd');
+
+    $this->get('/user/{slug}/follow', 'SocialController:follow')->setName('user.follow');
 })->add(new AuthMiddleware($container));
 
 $app->group('', function () {
