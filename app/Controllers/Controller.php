@@ -2,6 +2,17 @@
 
 namespace App\Controllers;
 
+use App\Auth\Auth;
+use App\Validation\Validator;
+use Slim\Flash\Messages;
+use Slim\Views\Twig;
+
+/**
+ * @property Auth auth
+ * @property Messages flash
+ * @property Twig view
+ * @property Validator validator
+ */
 class Controller
 {
     protected $container;
