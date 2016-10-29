@@ -8,3 +8,19 @@
     vertical-align: middle;
     margin-bottom: 0.1em;
 }
+
+.feed > .panel > .panel-heading {
+    padding: 20px;
+}
+
+.feed > .panel > .panel-body {
+    padding: 0;
+}
+
+.post-username {
+    font-weight: bold;
+}
+
+.post-caption {
+    padding: 10px 20px;
+}
