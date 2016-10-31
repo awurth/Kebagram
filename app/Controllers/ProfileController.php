@@ -30,12 +30,9 @@ class ProfileController extends Controller
 
 
     public function editAccount($request, $response) {
-
         $id = $this->auth->user()->user_id;
         $edit = NULL;
-
         if (isset($_GET)) { $edit = $_GET['what']; }
-
         return $this->view->render($response, 'profiles/editaccount.twig',["user" => User::find($id),"edit" => $edit]);
     }
 
@@ -43,7 +40,8 @@ class ProfileController extends Controller
         return ( ($p == $p2) && strlen($p) > 6);
     }
 
-    private function usernameAvailable($username) {
+    private function usernameAvailable($username)
+    {
         if (!(ctype_space($username))) {
             if ( User::where('user_name',$username)->first == NULL ) {
                 $this->flash->addMessage('info', 'Your username has changed');
@@ -58,9 +56,10 @@ class ProfileController extends Controller
     }
 
 
-    private function emailAvailable($email) {
-        if (!(ctype_space($username))) {
-            if ( User::where('user_email',$username)->first == NULL ) {
+    private function emailAvailable($email)
+    {
+        if (!(ctype_space($email))) {
+            if ( User::where('user_email',$email)->first == NULL ) {
                 $this->flash->addMessage('info', 'Your email address has changed');
                 return true;
             }else{
@@ -76,7 +75,8 @@ class ProfileController extends Controller
         return User::find($this->auth->user()->user_id);
     }
 
-    public function saveEdit($request,$response) {
+    public function saveEdit($request,$response)
+    {
         if (isset($_POST)) {
             switch( $request->getParam('what') ) {
                 case "password" :
@@ -121,8 +121,6 @@ class ProfileController extends Controller
             }
         }
         return $response->withRedirect($this->router->pathFor("home"));
-
-
     }
 
 
