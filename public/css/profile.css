@@ -1,0 +1,52 @@
+
+.avatar {
+    margin: 50px 25px;
+    width: 200px;
+    height: 200px;
+    background-color: #CCCCCC;
+    border-radius: 50%;
+}
+
+.avatar > img {
+    width: 100%;
+}
+
+.avatar, .profile-info {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.profile-info {
+    padding: 80px 0 0 25px;
+}
+
+.profile-info > h2, .profile-info > ul {
+    margin-bottom: 20px;
+}
+
+.profile-info > ul > li {
+    padding-right: 20px;
+}
+
+.profile-name {
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+.profile-photos {
+    padding-top: 10px;
+}
+
+.photo {
+    margin-bottom: 10px;
+
+}
+
+.photo > img {
+    width: 100%;
+}
+
+.photo > img:hover {
+    box-shadow: 0 0 5px #CCCCCC;
+    cursor: pointer;
+}
