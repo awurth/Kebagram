@@ -38,13 +38,13 @@ $(document).ready(function () {
         if (width > height) {
             x = (width / 2) - (height / 2);
             y = 0;
-            x2 = height;
+            x2 = height + x;
             y2 = height;
         } else if (width < height) {
             x = 0;
             y = (height / 2) - (width / 2);
             x2 = width;
-            y2 = width;
+            y2 = width + y;
         } else {
             x = 0;
             y = 0;
@@ -52,12 +52,7 @@ $(document).ready(function () {
             y2 = height;
         }
 
-        return {
-            x: x,
-            y: y,
-            x2: x2,
-            y2: y2
-        };
+        return [x, y, x2, y2];
     };
 
     $('#picture-file').change(function (e) {
@@ -77,7 +72,7 @@ $(document).ready(function () {
                 thumb.html(img);
                 thumb.Jcrop({
                     aspectRatio: 1,
-                    setSelect: [coords.x, coords.y, coords.x2, coords.y2],
+                    setSelect: coords,
                     onChange: setCoords,
                     onSelect: setCoords,
                     onRelease: noCrop
@@ -92,10 +87,10 @@ $(document).ready(function () {
 
     });
 
-    cropPicInput.change(function (e) {
+    cropPicInput.change(function () {
         if ($(this).prop('checked')) {
             var coords = getSelectCoords(originalWidthInput.val(), originalHeightInput.val());
-            jcrop_api.setSelect([coords.x, coords.y, coords.x2, coords.y2]);
+            jcrop_api.setSelect(coords);
         } else {
             jcrop_api.release();
         }
