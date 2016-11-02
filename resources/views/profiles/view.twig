@@ -18,7 +18,11 @@
                             {% if auth.user.user_id == user.user_id %}
                                 <a href="{{ path_for('edit.account') }}" class="btn btn-primary">Edit</a>
                             {% else %}
-                                <a href="#" class="btn btn-primary">Follow</a>
+                                {% if following %}
+                                    <a href="#" class="btn btn-primary">Unfollow</a>
+                                {% else %}
+                                    <a href="{{ path_for('user.follow', {'slug': user.user_slug}) }}" class="btn btn-primary">Follow</a>
+                                {% endif %}
                             {% endif %}
                         {% endif %}
                     </h2>
