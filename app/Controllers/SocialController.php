@@ -22,6 +22,15 @@ class SocialController extends Controller
             throw new \Exception('You cannot follow yourself!');
         }
 
+        $subscription = DB::table('subscription')
+            ->where('follower_id', $currentUser->user_id)
+            ->where('followed_id', $user->user_id)
+            ->first();
+
+        if ($subscription) {
+            return $response->withRedirect($this->router->pathFor('user.profile', ['slug' => $user->user_slug]));
+        }
+
         $currentUser->following()->attach($user->user_id, ['created_at' => new \DateTime()]);
 
         $this->flash->addMessage('success', 'You are now following ' . $user->user_name . '!');
