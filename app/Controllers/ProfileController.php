@@ -40,14 +40,11 @@ class ProfileController extends Controller
 
     public function editAccount($request, $response)
     {
-        $id = $this->auth->user()->user_id;
         $edit = NULL;
-
         if (isset($_GET)) {
             $edit = $_GET['what'];
         }
-
-        return $this->view->render($response, 'profiles/editaccount.twig', ["user" => User::find($id), "edit" => $edit]);
+        return $this->view->render($response, 'profiles/editaccount.twig',["edit" => $edit]);
     }
 
     private function passwordMatches($p, $p2)
@@ -58,7 +55,7 @@ class ProfileController extends Controller
     private function usernameAvailable($username)
     {
         if (!(ctype_space($username))) {
-            if (User::where('user_name', $username)->first == NULL) {
+            if (User::where('user_name', $username)->first() == NULL) {
                 $this->flash->addMessage('info', 'Your username has changed');
                 return true;
             } else {
@@ -73,7 +70,7 @@ class ProfileController extends Controller
     private function emailAvailable($email)
     {
         if (!(ctype_space($email))) {
-            if ( User::where('user_email',$email)->first == NULL ) {
+            if ( User::where('user_email',$email)->first() == NULL ) {
                 $this->flash->addMessage('info', 'Your email address has changed');
                 return true;
             } else {
@@ -87,7 +84,7 @@ class ProfileController extends Controller
 
     private function me()
     {
-        return User::find($this->auth->user()->user_id);
+        return $this->auth->user();
     }
 
     public function saveEdit($request, $response)
