@@ -58,7 +58,7 @@ class ProfileController extends Controller
     private function usernameAvailable($username)
     {
         if (!(ctype_space($username))) {
-            if (User::where('user_name', $username)->first == NULL) {
+            if (User::where('user_name', $username)->first() == NULL) {
                 $this->flash->addMessage('info', 'Your username has changed');
                 return true;
             } else {
@@ -73,7 +73,7 @@ class ProfileController extends Controller
     private function emailAvailable($email)
     {
         if (!(ctype_space($email))) {
-            if ( User::where('user_email',$email)->first == NULL ) {
+            if ( User::where('user_email',$email)->first() == NULL ) {
                 $this->flash->addMessage('info', 'Your email address has changed');
                 return true;
             } else {
@@ -87,7 +87,7 @@ class ProfileController extends Controller
 
     private function me()
     {
-        return User::find($this->auth->user()->user_id);
+        return $this->auth->user();
     }
 
     public function saveEdit($request, $response)
