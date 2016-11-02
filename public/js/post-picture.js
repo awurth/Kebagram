@@ -1,6 +1,8 @@
 
 $(document).ready(function () {
 
+    var jcrop_api;
+
     var container = $('#picture-container');
     var containerWidth = container.width();
     var cropPicContainer = $('#crop-pic-container');
@@ -79,6 +81,8 @@ $(document).ready(function () {
                     onChange: setCoords,
                     onSelect: setCoords,
                     onRelease: noCrop
+                }, function () {
+                    jcrop_api = this;
                 });
             },
             {maxWidth: containerWidth}
@@ -88,8 +92,15 @@ $(document).ready(function () {
 
     });
 
-    /*$('#crop-pic').change(function (e) {
+    cropPicInput.change(function (e) {
+        if ($(this).prop('checked')) {
+            var coords = getSelectCoords(originalWidthInput.val(), originalHeightInput.val());
+            jcrop_api.setSelect([coords.x, coords.y, coords.x2, coords.y2]);
+        } else {
+            jcrop_api.release();
+        }
 
-    });*/
+        return false;
+    });
 
 });
