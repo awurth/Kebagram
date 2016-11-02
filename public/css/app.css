@@ -9,6 +9,10 @@
     margin-bottom: 0.1em;
 }
 
+.feed > .panel {
+    margin-top: 50px;
+}
+
 .feed > .panel > .panel-heading {
     padding: 20px;
 }
@@ -19,6 +23,12 @@
 
 .post-username {
     font-weight: bold;
+    color: #333333;
+}
+
+.post-username:hover {
+    text-decoration: none;
+    color: #333333;
 }
 
 .post-caption {

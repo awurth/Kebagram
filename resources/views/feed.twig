@@ -7,13 +7,13 @@
         <div class="col-md-8 col-md-offset-2 feed">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <span class="post-username">{{ post.user_name }}</span>
+                    <a href="{{ path_for('user.profile', {'slug': post.user_slug}) }}" class="post-username">{{ post.user_name }}</a>
                     <span class="pull-right">{{ diffForHumans(post.created_at) }}</span>
                 </div>
                 <div class="panel-body">
                     <img src="{{ base_url() }}/uploads/images/kebabs/{{ post.id }}.jpg" width="100%" alt="Kebab">
                     <div class="post-caption">
-                        <span class="post-username">{{ post.user_name }}</span> <span>{{ post.description }}</span>
+                        <a href="{{ path_for('user.profile', {'slug': post.user_slug}) }}" class="post-username">{{ post.user_name }}</a> <span>{{ post.description }}</span>
                     </div>
                 </div>
             </div>
