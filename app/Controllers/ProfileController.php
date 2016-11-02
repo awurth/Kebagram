@@ -41,7 +41,7 @@ class ProfileController extends Controller
     public function editAccount($request, $response)
     {
         $edit = NULL;
-        if (isset($_GET)) {
+        if (isset($_GET['what'])) {
             $edit = $_GET['what'];
         }
         return $this->view->render($response, 'profiles/editaccount.twig',["edit" => $edit]);
