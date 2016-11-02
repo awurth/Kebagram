@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\Picture;
 use App\Models\User;
 use Slim\Exception\NotFoundException;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class ProfileController extends Controller
 {
@@ -18,6 +19,7 @@ class ProfileController extends Controller
 
         $page = $request->getParam('page') ? (int) $request->getParam('page') : 1;
 
+        // --->>> GET PICTURES
         $builder = Picture::where('user_id', $user->user_id);
         $count = $builder->count();
 
@@ -28,13 +30,30 @@ class ProfileController extends Controller
         }
 
         $pictures = $builder->get();
+        // GET PICTURES <<<---
+
+        $subscription = DB::table('subscription')
+                        ->where('follower_id', $this->auth->user()->user_id)
+                        ->where('followed_id', $user->user_id)
+                        ->first();
+
+        $followers = DB::table('subscription')
+                        ->where('followed_id', $user->user_id)
+                        ->count();
+
+        $following = DB::table('subscription')
+                        ->where('follower_id', $user->user_id)
+                        ->count();
 
         return $this->view->render($response, 'profiles/view.twig', [
             'user' => $user,
             'pictures' => $pictures,
             'count' => $count,
             'pages' => ceil($count / 9),
-            'page' => $page
+            'page' => $page,
+            'is_following' => ($subscription !== null),
+            'followers' => $followers,
+            'following' => $following
         ]);
     }
 
