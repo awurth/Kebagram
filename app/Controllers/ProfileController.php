@@ -40,14 +40,11 @@ class ProfileController extends Controller
 
     public function editAccount($request, $response)
     {
-        $id = $this->auth->user()->user_id;
         $edit = NULL;
-
         if (isset($_GET)) {
             $edit = $_GET['what'];
         }
-
-        return $this->view->render($response, 'profiles/editaccount.twig', ["user" => User::find($id), "edit" => $edit]);
+        return $this->view->render($response, 'profiles/editaccount.twig',["edit" => $edit]);
     }
 
     private function passwordMatches($p, $p2)
