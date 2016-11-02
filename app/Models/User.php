@@ -29,14 +29,14 @@ class User extends Model
         ]);
     }
 
-    /**
-    * The user has one subscription.
-    *
-    * @return mixed
-    */
-    public function subscription()
+    public function following()
     {
-        return $this->hasOne('App\Models\Subscription');
+        return $this->belongsToMany('App\Models\User', 'subscription', 'follower_id', 'followed_id');
+    }
+
+    public function followers()
+    {
+        return $this->belongsToMany('App\Models\User', 'subscription', 'followed_id', 'follower_id');
     }
 
     /**
@@ -47,19 +47,5 @@ class User extends Model
     public function pictures()
     {
         return $this->hasMany('App\Models\Picture');
-    }
-
-
-    /**
-    * Check if the user has a valid subscription
-    *
-    * @return bool
-    */
-    public function hasSubscription()
-    {
-        $dueDate = new \DateTime(User::find($_SESSION['user_id'])->subscription->due_date);
-        $todaysDate = new \DateTime();
-
-        return $todaysDate <= $dueDate;
     }
 }

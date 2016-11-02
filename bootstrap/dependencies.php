@@ -33,7 +33,7 @@ $container['view'] = function ($container) {
         $container->request->getUri()
     ));
     $view->addExtension(new Twig_Extension_Debug());
-    $view->addExtension(new App\TwigExtension\diffForHumans());
+    $view->addExtension(new App\TwigExtension\DiffForHumans());
 
     $view->getEnvironment()->addGlobal('auth', [
         'check' => $container->auth->check(),
@@ -105,4 +105,8 @@ $container['AdminController'] = function ($container) {
 
 $container['PictureController'] = function ($container) {
     return new \App\Controllers\PictureController($container);
+};
+
+$container['SocialController'] = function ($container) {
+    return new \App\Controllers\SocialController($container);
 };

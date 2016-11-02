@@ -2,13 +2,10 @@
 
 namespace App\TwigExtension;
 
-class diffForHumans extends \Slim\Views\TwigExtension
+use App\Helper;
+
+class DiffForHumans extends \Twig_Extension
 {
-
-    public function __construct()
-    {
-    }
-
     public function getName()
     {
         return 'diffForHumans';
@@ -23,6 +20,6 @@ class diffForHumans extends \Slim\Views\TwigExtension
 
     public function diffForHumans($datetime)
     {
-        return \App\Helper::diffForHumans($datetime);
+        return Helper::diffForHumans($datetime);
     }
 }

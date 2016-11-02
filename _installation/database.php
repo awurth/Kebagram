@@ -14,6 +14,7 @@ $capsule->bootEloquent();
 
 Manager::schema()->dropIfExists('photos');
 Manager::schema()->dropIfExists('users');
+Manager::schema()->dropIfExists('subscription');
 
 Manager::schema()->create('users', function (Blueprint $table) {
     $table->increments('user_id');
@@ -45,4 +46,13 @@ Manager::schema()->create('picture', function (Blueprint $table) {
     $table->timestamps();
     $table->integer('user_id')->unsigned();
     $table->foreign('user_id')->references('user_id')->on('users');
+});
+
+Manager::schema()->create('subscription', function (Blueprint $table) {
+    $table->integer('follower_id')->unsigned();
+    $table->integer('followed_id')->unsigned();
+    $table->dateTime('created_at');
+    $table->primary(['follower_id', 'followed_id']);
+    $table->foreign('follower_id')->references('user_id')->on('users');
+    $table->foreign('followed_id')->references('user_id')->on('users');
 });
