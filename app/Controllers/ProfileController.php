@@ -37,13 +37,23 @@ class ProfileController extends Controller
                         ->where('followed_id', $user->user_id)
                         ->first();
 
+        $followers = DB::table('subscription')
+                        ->where('followed_id', $user->user_id)
+                        ->count();
+
+        $following = DB::table('subscription')
+                        ->where('follower_id', $user->user_id)
+                        ->count();
+
         return $this->view->render($response, 'profiles/view.twig', [
             'user' => $user,
             'pictures' => $pictures,
             'count' => $count,
             'pages' => ceil($count / 9),
             'page' => $page,
-            'following' => ($subscription !== null)
+            'is_following' => ($subscription !== null),
+            'followers' => $followers,
+            'following' => $following
         ]);
     }
 
