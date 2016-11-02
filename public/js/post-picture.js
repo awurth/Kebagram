@@ -3,6 +3,8 @@ $(document).ready(function () {
 
     var container = $('#picture-container');
     var containerWidth = container.width();
+    var cropPicContainer = $('#crop-pic-container');
+    var cropPicInput = $('#crop-pic');
 
     var xInput = $('#pic-x');
     var yInput = $('#pic-y');
@@ -13,6 +15,10 @@ $(document).ready(function () {
     var originalWidthInput = $('#original-width');
     var originalHeightInput = $('#original-height');
 
+    var noCrop = function () {
+        cropPicInput.prop('checked', false);
+    };
+
     var setCoords = function (c) {
         xInput.val(c.x);
         yInput.val(c.y);
@@ -20,6 +26,8 @@ $(document).ready(function () {
         y2Input.val(c.y2);
         widthInput.val(c.w);
         heightInput.val(c.h);
+
+        cropPicInput.prop('checked', true);
     };
 
     var getSelectCoords = function (width, height) {
@@ -53,6 +61,7 @@ $(document).ready(function () {
     $('#picture-file').change(function (e) {
         container.empty();
         container.append('<div id="picture-thumb"></div>');
+
         var thumb = container.children('#picture-thumb');
 
         loadImage(
@@ -68,12 +77,19 @@ $(document).ready(function () {
                     aspectRatio: 1,
                     setSelect: [coords.x, coords.y, coords.x2, coords.y2],
                     onChange: setCoords,
-                    onSelect: setCoords
+                    onSelect: setCoords,
+                    onRelease: noCrop
                 });
             },
             {maxWidth: containerWidth}
         );
 
+        cropPicContainer.show();
+
     });
+
+    /*$('#crop-pic').change(function (e) {
+
+    });*/
 
 });
