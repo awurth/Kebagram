@@ -19,9 +19,9 @@
                                 <a href="{{ path_for('edit.account') }}" class="btn btn-primary">Edit</a>
                             {% else %}
                                 {% if following %}
-                                    <a href="#" class="btn btn-primary">Unfollow</a>
+                                    <a href="{{ path_for('user.unfollow', {'slug': user.user_slug}) }}" class="btn btn-primary">Unfollow</a>
                                 {% else %}
-                                    <a href="{{ path_for('user.follow', {'slug': user.user_slug}) }}" class="btn btn-primary">Follow</a>
+                                    <a href="{{ path_for('user.follow', {'slug': user.user_slug}) }}" class="btn btn-primary btn-raised">Follow</a>
                                 {% endif %}
                             {% endif %}
                         {% endif %}
