@@ -2,14 +2,17 @@
 
 namespace App\Controllers;
 
+use App\Models\PictureRating;
 use Respect\Validation\Validator as v;
 use Intervention\Image\ImageManager;
 use App\Models\Picture;
 use App\Upload\FileUploader;
 use App\Upload\UploadedFile;
+use App\Controllers\ProfileController;
 
 class PictureController extends Controller
 {
+
     public function getAdd($request, $response)
     {
         return $this->view->render($response, 'picture/new.twig');
@@ -68,5 +71,44 @@ class PictureController extends Controller
         $size = $image->height() > $image->width() ? $image->height() : $image->width();
 
         $image->resizeCanvas($size, $size, 'center', false, '#000000')->save($dest);
+    }
+
+    public function isLiked($userId,$pictureId)
+    {
+        $query = PictureRating::where($userId,'=','user_id')
+                    ->where($pictureId,'=','picture_id')
+                    ->first();
+
+        if ($query == NULL) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function dislike($idPhoto)
+    {
+        $user = new ProfileController();
+        $user = $user->me();
+        if ( ($this->isLiked($user->user_id,$idPhoto)) ) {
+
+            $like = PictureRating::where($userId,'=','user_id')
+                ->where($pictureId,'=','picture_id')
+                ->first();
+
+            $like->delete();
+        }
+    }
+
+    public function ratePicture($idPhoto)
+    {
+        $user = new ProfileController();
+        $user = $user->me();
+
+        if ( !($this->isLiked($user->user_id,$idPhoto)) ) {
+            $pictureRate = new PictureRating($user->user_id,$idPhoto);
+            $pictureRate->liker();
+            $pictureRate->save();
+        }
     }
 }

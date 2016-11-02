@@ -49,6 +49,11 @@ class User extends Model
         return $this->hasMany('App\Models\Picture');
     }
 
+    public function pictureRating()
+    {
+        return $this->hasMany('App\Models\PictureRating');
+    }
+
 
     /**
     * Check if the user has a valid subscription

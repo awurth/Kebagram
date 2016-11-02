@@ -85,7 +85,7 @@ class ProfileController extends Controller
         return false;
     }
 
-    private function me()
+    public function me()
     {
         return User::find($this->auth->user()->user_id);
     }
