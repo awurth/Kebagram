@@ -43,8 +43,3 @@ $app->group('', function () {
     $this->get('/admin', 'AdminController:getIndex')->setName('admin.index');
     $this->post('/admin', 'AdminController:postIndex')->setName('admin.post');
 })->add(new AdminMiddleware($container));
-
-/* Subscription */
-$app->get('/subscription', function ($request, $response) {
-    return $this->view->render($response, 'subscriber/index.twig');
-})->add(new SubscriberMiddleware($container));
