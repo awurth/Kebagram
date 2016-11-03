@@ -11,7 +11,6 @@
         <div class="navbar-collapse collapse navbar-warning-collapse">
             <ul class="nav navbar-nav">
                 {% if auth.check %}
-                    <li><a href="{{ path_for('dashboard') }}">Dashboard</a></li>
                     <li><a href="{{ path_for('picture.add') }}">Add picture</a></li>
                 {% endif %}
             </ul>
