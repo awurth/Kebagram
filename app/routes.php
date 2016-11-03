@@ -30,8 +30,6 @@ $app->group('', function () {
     $this->get('/password/change', 'PasswordController:getChangePassword')->setName('auth.password.change');
     $this->post('/password/change', 'PasswordController:postChangePassword');
 
-    $this->get('/dashboard', 'AuthController:dashboard')->setName('dashboard');
-
     $this->get('/pic/add', 'PictureController:getAdd')->setName('picture.add');
     $this->post('/pic/add', 'PictureController:postAdd');
 

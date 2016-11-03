@@ -128,15 +128,6 @@ class AuthController extends Controller
         return false;
     }
 
-    /**
-    * Render dashboard
-    */
-    public function dashboard($request, $response)
-    {
-        return $this->view->render($response, 'auth/dashboard/dashboard.twig');
-    }
-
-
     public function generateSlug($text) {
         $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
         $text = trim($text, '-');
