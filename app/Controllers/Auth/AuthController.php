@@ -65,7 +65,7 @@ class AuthController extends Controller
         }
 
         // If Auth successfull, then redirect to choosen location
-        return $response->withRedirect($this->router->pathFor('dashboard'));
+        return $response->withRedirect($this->router->pathFor('home'));
     }
 
     /**
@@ -123,7 +123,6 @@ class AuthController extends Controller
             /** Add a flas message that everything went ok **/
             $this->flash->addMessage('success', 'You have been signed up!');
 
-            /** On success registration, redirect to dashboard */
             return $response->withRedirect($this->router->pathFor('home'));
         }
         return false;
