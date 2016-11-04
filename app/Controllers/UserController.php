@@ -11,7 +11,8 @@ class UserController extends Controller
         $users = User::where('user_name', 'like', '%' . $request->getParam('q') . '%')->get();
 
         return $this->view->render($response, 'user/search.twig', [
-            'users' => $users
+            'users' => $users,
+            'q' => $request->getParam('q')
         ]);
     }
 }
