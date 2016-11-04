@@ -98,4 +98,23 @@ class SocialController extends Controller
 
         return $this->view->render($response, 'social/comments.twig', ['comments' => $comments]);
     }
+
+    public function deleteComment($request, $response, $args)
+    {
+        $comment = Comment::find($args['id']);
+
+        if (!$comment) {
+            throw new NotFoundException($request, $response);
+        }
+
+        if ($comment->user != $this->auth->user()) {
+            $this->flash->addMessage('error', 'This comment does not belong to you!');
+            return $response->withRedirect($this->router->pathFor('home'));
+        }
+
+        $comment->delete();
+
+        $this->flash->addMessage('success', 'Your comment has been deleted.');
+        return $response->withRedirect($this->router->pathFor('home'));
+    }
 }
