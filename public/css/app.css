@@ -45,12 +45,12 @@ hr {
     padding: 0;
 }
 
-.post-username {
+.post-username, .comment-username {
     font-weight: bold;
     color: #333333;
 }
 
-.post-username:hover {
+.post-username:hover, .comment-username:hover {
     text-decoration: none;
     color: #333333;
 }
@@ -69,4 +69,8 @@ hr {
 
 .post-comments .form-group {
     margin: 0;
+}
+
+.comment {
+    padding: 5px 0;
 }

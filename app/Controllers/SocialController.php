@@ -91,4 +91,11 @@ class SocialController extends Controller
         $this->flash->addMessage('success', 'Comment added successfully!');
         return $response->withRedirect($this->router->pathFor('home'));
     }
+
+    public function getComments($request, $response, $args)
+    {
+        $comments = Comment::with('user')->where('picture_id', $args['id'])->get();
+
+        return $this->view->render($response, 'social/comments.twig', ['comments' => $comments]);
+    }
 }

@@ -17,6 +17,7 @@
                         <hr>
                     </div>
                     <div class="post-comments">
+                        <a href="#" class="display-comments" data-post-id="{{ post.id }}" data-url="{{ path_for('comments', {'id': post.id}) }}">Display comments</a>
                         <form action="{{ path_for('comment', {'id': post.id}) }}" method="POST">
                             <input type="text" name="content" class="form-control" placeholder="Post a comment...">
                             {{ csrf.field|raw }}
@@ -28,4 +29,8 @@
     </div>
 {% endfor %}
 
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ base_url() }}/js/load-comments.js"></script>
 {% endblock %}

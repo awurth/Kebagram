@@ -1,0 +1,7 @@
+
+{% for comment in comments %}
+    <div class="comment">
+        <a href="{{ path_for('user.profile', {'slug': comment.user.user_slug}) }}" class="comment-username">{{ comment.user.user_name }}</a>
+        <span class="comment-content">{{ comment.content }}</span>
+    </div>
+{% endfor %}
