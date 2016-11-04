@@ -8,6 +8,9 @@
             <h1>Results for: {{ q }}</h1>
         </div>
         <div class="list-group">
+            {% if users.empty %}
+                <p>No results found for {{ q }}</p>
+            {% endif %}
             {% for user in users %}
                 <div class="list-group-item">
                     <div class="row-picture">
