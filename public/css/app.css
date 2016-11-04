@@ -29,6 +29,10 @@
     text-transform: capitalize;
 }
 
+hr {
+    margin: 10px 0 0 0;
+}
+
 .feed > .panel {
     margin-top: 50px;
 }
@@ -57,4 +61,12 @@
 
 .add-picture {
     padding-bottom: 30px;
+}
+
+.post-comments {
+    padding: 0 20px;
+}
+
+.post-comments .form-group {
+    margin: 0;
 }
