@@ -9,18 +9,9 @@
             <a class="navbar-brand" href="{{ path_for('home') }}">Kebagram</a>
         </div>
         <div class="navbar-collapse collapse navbar-warning-collapse">
-            <ul class="nav navbar-nav">
-                {% if auth.check %}
-                    <li><a href="{{ path_for('picture.add') }}">Add picture</a></li>
-                {% endif %}
-            </ul>
-            <form class="navbar-form navbar-left" action="{{ path_for('user.search') }}" method="GET">
-                <div class="form-group">
-                    <input class="form-control col-md-8" placeholder="Search" type="text" name="q">
-                </div>
-            </form>
             <ul class="nav navbar-nav navbar-right">
                 {% if auth.check %}
+                    <li><a href="{{ path_for('picture.add') }}">Add picture</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ auth.user.user_name }} <span class="caret"></span></a>
                         <ul class="dropdown-menu">
@@ -39,6 +30,11 @@
                     <li><a href="{{ path_for('auth.signin') }}">Sign in</a></li>
                 {% endif %}
             </ul>
+            <form class="navbar-form navbar-right" action="{{ path_for('user.search') }}" method="GET">
+                <div class="form-group">
+                    <input class="form-control col-md-8" placeholder="Search" type="text" name="q">
+                </div>
+            </form>
         </div>
     </div>
 </div>
