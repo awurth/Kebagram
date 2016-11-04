@@ -37,8 +37,8 @@ $app->group('', function () {
     $this->get('/user/{slug}/follow', 'SocialController:follow')->setName('user.follow');
     $this->get('/user/{slug}/unfollow', 'SocialController:unfollow')->setName('user.unfollow');
 
-    $this->post('/pic/{id}/comment', 'SocialController:postComment')->setName('comment');
-    $this->get('/pic/{id}/comments', 'SocialController:getComments')->setName('comments');
+    $this->post('/pic/{id}/comment', 'SocialController:postComment')->setName('comment.add');
+    $this->get('/pic/{id}/comments', 'SocialController:getComments')->setName('comment.get');
 })->add(new AuthMiddleware($container));
 
 $app->group('', function () {
