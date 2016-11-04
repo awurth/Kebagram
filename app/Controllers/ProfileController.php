@@ -73,8 +73,8 @@ class ProfileController extends Controller
 
     private function usernameAvailable($username)
     {
-        if (!(ctype_space($username))) {
-            if (User::where('user_name', $username)->first() == NULL) {
+        if ($username && !(ctype_space($username))) {
+            if (User::where('user_name','=', $username)->first() == NULL) {
                 $this->flash->addMessage('info', 'Your username has changed');
                 return true;
             } else {
