@@ -31,4 +31,9 @@ class Picture extends Model
     {
         return $this->hasMany('App\Models\PictureRating');
     }
+
+	public function comments()
+    {
+        return $this->hasMany('App\Models\Comment');
+    }
 }
