@@ -1,0 +1,32 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+
+<div class="row">
+    <div class="col-xs-12 panel">
+        <div class="page-header">
+            <h1>Results for: {{ q }}</h1>
+        </div>
+        <div class="list-group">
+            {% if users.empty %}
+                <p>No results found for {{ q }}</p>
+            {% endif %}
+            {% for user in users %}
+                <div class="list-group-item">
+                    <div class="row-picture">
+                        <img class="circle" src="{{ base_url() }}/uploads/images/kebabs/51.jpg" alt="Avatar">
+                    </div>
+                    <div class="row-content">
+                        <h4 class="list-group-item-heading"><a href="{{ path_for('user.profile', {'slug': user.user_slug}) }}">{{ user.user_name }}</a></h4>
+                        <p class="list-group-item-text"><strong>Firstname</strong> Lorem ipsum dolor sit amet</p>
+                    </div>
+                    {% if not loop.last %}
+                        <div class="list-group-separator"></div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
