@@ -48,4 +48,24 @@ class User extends Model
     {
         return $this->hasMany('App\Models\Picture');
     }
+
+    public function pictureRating()
+    {
+        return $this->hasMany('App\Models\PictureRating');
+    }
+
+
+    /**
+    * Check if the user has a valid subscription
+    *
+    * @return bool
+    */
+    public function hasSubscription()
+    {
+        $dueDate = new \DateTime(User::find($_SESSION['user_id'])->subscription->due_date);
+        $todaysDate = new \DateTime();
+
+        return $todaysDate <= $dueDate;
+    }
+
 }

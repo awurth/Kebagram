@@ -9,6 +9,26 @@
     margin-bottom: 0.1em;
 }
 
+.social {
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.auteur {
+    font-weight:bolder;
+}
+
+.photo-description {
+    font-style:italic;
+    text-transform: lowercase;
+    padding-left:10%;
+    float:right;
+}
+
+.photo-description::first-letter {
+    text-transform: capitalize;
+}
+
 .feed > .panel {
     margin-top: 50px;
 }
@@ -34,3 +54,4 @@
 .post-caption {
     padding: 10px 20px;
 }
+

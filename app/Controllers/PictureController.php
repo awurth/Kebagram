@@ -2,15 +2,18 @@
 
 namespace App\Controllers;
 
+use App\Models\PictureRating;
 use Intervention\Image\Image;
 use Respect\Validation\Validator as v;
 use Intervention\Image\ImageManager;
 use App\Models\Picture;
 use App\Upload\FileUploader;
 use App\Upload\UploadedFile;
+use App\Controllers\ProfileController;
 
 class PictureController extends Controller
 {
+
     public function getAdd($request, $response)
     {
         return $this->view->render($response, 'picture/new.twig');
@@ -128,5 +131,64 @@ class PictureController extends Controller
         $size = $image->height() > $image->width() ? $image->height() : $image->width();
 
         return $image->resizeCanvas($size, $size, 'center', false, '#000000');
+    }
+
+
+    public function likeDispatcher($request,$response)
+    {
+        $action = $request->getParam('what');
+        $idPhoto = $request->getParam('idPhoto');
+        $userTarget = $request->getParam('userTarget');
+        $idUser = $this->auth->user()->user_id;
+
+        if ($action && $idPhoto && $idUser && $userTarget){
+            switch($action) {
+                case 'like' :
+                    $this->likePhoto($idUser,$idPhoto);
+                    $this->flash->addMessage('success', '<i class="material-icons">thumb_up</i> Photo liked');
+                    return $response->withRedirect('user/'.$userTarget);
+                case 'dislike' :
+                    $this->dislikePhoto($idUser,$idPhoto);
+                    $this->flash->addMessage('error', '<i class="material-icons">thumb_down</i> Photo disliked');
+                    return $response->withRedirect('user/'.$userTarget);
+            }
+        }
+
+        $this->flash->addMessage('error', 'You just tried a weird thing.');
+        return $response->withRedirect('.');
+    }
+
+    private function isLiked($idUser,$idPhoto)
+    {
+        $query = PictureRating::where('user_id','=',$idUser)
+                    ->where('picture_id','=',$idPhoto)
+                    ->first();
+
+        if ($query == NULL) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function dislikePhoto($idUser,$idPhoto)
+    {
+        if ( ($this->isLiked($idUser,$idPhoto)) ) {
+
+            $like = PictureRating::where('user_id','=',$idUser)
+                ->where('picture_id','=',$idPhoto)
+                ->first();
+
+            $like->delete();
+        }
+    }
+
+    private function likePhoto($idUser,$idPhoto)
+    {
+        if ( !($this->isLiked($idUser,$idPhoto)) ) {
+            $pictureRate = new PictureRating;
+            $pictureRate->liker($idUser,$idPhoto);
+            $pictureRate->save();
+        }
     }
 }

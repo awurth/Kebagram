@@ -15,7 +15,6 @@ $app->get('/user/{slug}', 'ProfileController:view')->setName('user.profile');
 $app->group('', function () {
     $this->get('/signup', 'AuthController:getSignUp')->setName('auth.signup');
     $this->post('/signup', 'AuthController:postSignUp');
-
     $this->get('/signin', 'AuthController:getSignIn')->setName('auth.signin');
     $this->post('/signin', 'AuthController:postSignIn');
 })->add(new GuestMiddleware($container));
@@ -35,6 +34,7 @@ $app->group('', function () {
     $this->get('/pic/add', 'PictureController:getAdd')->setName('picture.add');
     $this->post('/pic/add', 'PictureController:postAdd');
 
+    $this->post('/liker', 'PictureController:likeDispatcher')->setName('photo.like');
     $this->get('/user/{slug}/follow', 'SocialController:follow')->setName('user.follow');
     $this->get('/user/{slug}/unfollow', 'SocialController:unfollow')->setName('user.unfollow');
 })->add(new AuthMiddleware($container));

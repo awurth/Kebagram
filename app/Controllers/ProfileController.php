@@ -19,8 +19,8 @@ class ProfileController extends Controller
 
         $page = $request->getParam('page') ? (int) $request->getParam('page') : 1;
 
-        // --->>> GET PICTURES
-        $builder = Picture::where('user_id', $user->user_id);
+        $builder = Picture::with("pictureRating")->where('user_id', $user->user_id);
+
         $count = $builder->count();
 
         $builder->orderBy('created_at', 'desc')->take(9);
@@ -101,7 +101,7 @@ class ProfileController extends Controller
         return false;
     }
 
-    private function me()
+    public function me()
     {
         return $this->auth->user();
     }
@@ -154,4 +154,8 @@ class ProfileController extends Controller
 
         return $response->withRedirect($this->router->pathFor('home'));
     }
+
+
+
+
 }
