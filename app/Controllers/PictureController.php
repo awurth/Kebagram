@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\PictureRating;
+use Intervention\Image\Image;
 use Respect\Validation\Validator as v;
 use Intervention\Image\ImageManager;
 use App\Models\Picture;
@@ -25,7 +26,7 @@ class PictureController extends Controller
 
         if (!v::notEmpty()->validate($caption)) {
             $this->flash->addMessage('error', 'The caption cannot be empty.');
-            return $request->withRedirect($redirectUrl);
+            return $response->withRedirect($redirectUrl);
         }
 
         $file = new UploadedFile('picture-file', true);
@@ -52,7 +53,39 @@ class PictureController extends Controller
             $picture->user()->associate($this->auth->user());
             $picture->save();
 
-            $this->resize($file->getTempName(), 'uploads/images/kebabs/' . $picture->id . '.jpg');
+            $image = $this->makeImage($file->getTempName());
+
+            if (
+                isset($_POST['crop-pic']) &&
+                isset($_POST['x']) &&
+                isset($_POST['y']) &&
+                isset($_POST['x2']) &&
+                isset($_POST['y2']) &&
+                isset($_POST['width']) &&
+                isset($_POST['height']) &&
+                isset($_POST['original-width']) &&
+                isset($_POST['original-height'])
+            ) {
+                $image = $this->crop(
+                    $image,
+                    (int) $_POST['x'],
+                    (int) $_POST['y'],
+                    (int) $_POST['x2'],
+                    (int) $_POST['y2'],
+                    (int) $_POST['width'],
+                    (int) $_POST['height'],
+                    (int) $_POST['original-width'],
+                    (int) $_POST['original-height']
+                );
+
+                if ($_POST['width'] != $_POST['height']) {
+                    $image = $this->resize($image);
+                }
+            } else {
+                $image = $this->resize($image);
+            }
+
+            $image->save('uploads/images/kebabs/' . $picture->id . '.jpg');
 
             $this->flash->addMessage('success', 'Picture added successfully!');
             return $response->withRedirect($this->router->pathFor('home'));
@@ -62,15 +95,42 @@ class PictureController extends Controller
         return $response->withRedirect($redirectUrl);
     }
 
-    public function resize($src, $dest)
+    private function makeImage($src)
     {
         $manager = new ImageManager(array('driver' => 'gd'));
 
-        $image = $manager->make($src);
+        return $manager->make($src);
+    }
 
+    private function crop(Image $image, $x1, $y1, $x2, $y2, $w, $h, $ow, $oh)
+    {
+        $x = $x1 < $x2 ? $x1 : $x2;
+        $y = $y1 < $y2 ? $y1 : $y2;
+
+        $square = $w == $h;
+
+        $x = (int) ceil(($x * $image->getWidth()) / $ow);
+        $y = (int) ceil(($y * $image->getHeight()) / $oh);
+
+        $w = (int) ceil(($w * $image->getWidth()) / $ow);
+        $h = (int) ceil(($h * $image->getHeight()) / $oh);
+
+        if ($square && $w != $h) {
+            if ($w > $h) {
+                $h = $w;
+            } else {
+                $w = $h;
+            }
+        }
+
+        return $image->crop($w, $h, $x, $y);
+    }
+
+    private function resize(Image $image)
+    {
         $size = $image->height() > $image->width() ? $image->height() : $image->width();
 
-        $image->resizeCanvas($size, $size, 'center', false, '#000000')->save($dest);
+        return $image->resizeCanvas($size, $size, 'center', false, '#000000');
     }
 
 

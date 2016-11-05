@@ -18,14 +18,18 @@
                             {% if auth.user.user_id == user.user_id %}
                                 <a href="{{ path_for('edit.account') }}" class="btn btn-primary">Edit</a>
                             {% else %}
-                                <a href="#" class="btn btn-primary">Follow</a>
+                                {% if is_following %}
+                                    <a href="{{ path_for('user.unfollow', {'slug': user.user_slug}) }}" class="btn btn-primary">Unfollow</a>
+                                {% else %}
+                                    <a href="{{ path_for('user.follow', {'slug': user.user_slug}) }}" class="btn btn-primary btn-raised">Follow</a>
+                                {% endif %}
                             {% endif %}
                         {% endif %}
                     </h2>
                     <ul class="list-unstyled list-inline">
-                        <li><strong>82</strong> posts</li>
-                        <li><strong>5483</strong> followers</li>
-                        <li><strong>147</strong> following</li>
+                        <li><strong>{{ count }}</strong> posts</li>
+                        <li><strong>{{ followers }}</strong> followers</li>
+                        <li><strong>{{ following }}</strong> following</li>
                     </ul>
                     <div class="profile-desc">
                         <span class="profile-name">Firstname</span>

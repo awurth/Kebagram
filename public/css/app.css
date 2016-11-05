@@ -29,4 +29,29 @@
     text-transform: capitalize;
 }
 
+.feed > .panel {
+    margin-top: 50px;
+}
+
+.feed > .panel > .panel-heading {
+    padding: 20px;
+}
+
+.feed > .panel > .panel-body {
+    padding: 0;
+}
+
+.post-username {
+    font-weight: bold;
+    color: #333333;
+}
+
+.post-username:hover {
+    text-decoration: none;
+    color: #333333;
+}
+
+.post-caption {
+    padding: 10px 20px;
+}
 

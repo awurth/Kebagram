@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\Picture;
 use App\Models\User;
 use Slim\Exception\NotFoundException;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class ProfileController extends Controller
 {
@@ -19,6 +20,7 @@ class ProfileController extends Controller
         $page = $request->getParam('page') ? (int) $request->getParam('page') : 1;
 
         $builder = Picture::with("pictureRating")->where('user_id', $user->user_id);
+
         $count = $builder->count();
 
         $builder->orderBy('created_at', 'desc')->take(9);
@@ -28,26 +30,40 @@ class ProfileController extends Controller
         }
 
         $pictures = $builder->get();
+        // GET PICTURES <<<---
+
+        $subscription = DB::table('subscription')
+                        ->where('follower_id', $this->auth->user()->user_id)
+                        ->where('followed_id', $user->user_id)
+                        ->first();
+
+        $followers = DB::table('subscription')
+                        ->where('followed_id', $user->user_id)
+                        ->count();
+
+        $following = DB::table('subscription')
+                        ->where('follower_id', $user->user_id)
+                        ->count();
 
         return $this->view->render($response, 'profiles/view.twig', [
             'user' => $user,
             'pictures' => $pictures,
             'count' => $count,
             'pages' => ceil($count / 9),
-            'page' => $page
+            'page' => $page,
+            'is_following' => ($subscription !== null),
+            'followers' => $followers,
+            'following' => $following
         ]);
     }
 
     public function editAccount($request, $response)
     {
-        $id = $this->auth->user()->user_id;
         $edit = NULL;
-
-        if (isset($_GET)) {
+        if (isset($_GET['what'])) {
             $edit = $_GET['what'];
         }
-
-        return $this->view->render($response, 'profiles/editaccount.twig', ["user" => User::find($id), "edit" => $edit]);
+        return $this->view->render($response, 'profiles/editaccount.twig',["edit" => $edit]);
     }
 
     private function passwordMatches($p, $p2)
@@ -57,8 +73,8 @@ class ProfileController extends Controller
 
     private function usernameAvailable($username)
     {
-        if (!(ctype_space($username))) {
-            if (User::where('user_name', $username)->first == NULL) {
+        if ($username && !(ctype_space($username))) {
+            if (User::where('user_name','=', $username)->first() == NULL) {
                 $this->flash->addMessage('info', 'Your username has changed');
                 return true;
             } else {
@@ -73,7 +89,7 @@ class ProfileController extends Controller
     private function emailAvailable($email)
     {
         if (!(ctype_space($email))) {
-            if ( User::where('user_email',$email)->first == NULL ) {
+            if ( User::where('user_email',$email)->first() == NULL ) {
                 $this->flash->addMessage('info', 'Your email address has changed');
                 return true;
             } else {
@@ -87,7 +103,7 @@ class ProfileController extends Controller
 
     public function me()
     {
-        return User::find($this->auth->user()->user_id);
+        return $this->auth->user();
     }
 
     public function saveEdit($request, $response)

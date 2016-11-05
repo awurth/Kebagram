@@ -35,6 +35,8 @@ $app->group('', function () {
     $this->post('/pic/add', 'PictureController:postAdd');
 
     $this->post('/liker', 'PictureController:likeDispatcher')->setName('photo.like');
+    $this->get('/user/{slug}/follow', 'SocialController:follow')->setName('user.follow');
+    $this->get('/user/{slug}/unfollow', 'SocialController:unfollow')->setName('user.unfollow');
 })->add(new AuthMiddleware($container));
 
 $app->group('', function () {
