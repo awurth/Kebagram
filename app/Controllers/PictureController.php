@@ -73,10 +73,35 @@ class PictureController extends Controller
         $image->resizeCanvas($size, $size, 'center', false, '#000000')->save($dest);
     }
 
-    public function isLiked($userId,$pictureId)
+
+    public function likeDispatcher($request,$response)
     {
-        $query = PictureRating::where($userId,'=','user_id')
-                    ->where($pictureId,'=','picture_id')
+        $action = $request->getParam('what');
+        $idPhoto = $request->getParam('idPhoto');
+        $userTarget = $request->getParam('userTarget');
+        $idUser = $this->auth->user()->user_id;
+
+        if ($action && $idPhoto && $idUser && $userTarget){
+            switch($action) {
+                case 'like' :
+                    $this->likePhoto($idUser,$idPhoto);
+                    $this->flash->addMessage('success', '<i class="material-icons">thumb_up</i> Photo liked');
+                    return $response->withRedirect('user/'.$userTarget);
+                case 'dislike' :
+                    $this->dislikePhoto($idUser,$idPhoto);
+                    $this->flash->addMessage('error', '<i class="material-icons">thumb_down</i> Photo disliked');
+                    return $response->withRedirect('user/'.$userTarget);
+            }
+        }
+
+        $this->flash->addMessage('error', 'You just tried a weird thing.');
+        return $response->withRedirect('.');
+    }
+
+    private function isLiked($idUser,$idPhoto)
+    {
+        $query = PictureRating::where('user_id','=',$idUser)
+                    ->where('picture_id','=',$idPhoto)
                     ->first();
 
         if ($query == NULL) {
@@ -86,28 +111,23 @@ class PictureController extends Controller
         return true;
     }
 
-    public function dislike($idPhoto)
+    private function dislikePhoto($idUser,$idPhoto)
     {
-        $user = new ProfileController();
-        $user = $user->me();
-        if ( ($this->isLiked($user->user_id,$idPhoto)) ) {
+        if ( ($this->isLiked($idUser,$idPhoto)) ) {
 
-            $like = PictureRating::where($userId,'=','user_id')
-                ->where($pictureId,'=','picture_id')
+            $like = PictureRating::where('user_id','=',$idUser)
+                ->where('picture_id','=',$idPhoto)
                 ->first();
 
             $like->delete();
         }
     }
 
-    public function ratePicture($idPhoto)
+    private function likePhoto($idUser,$idPhoto)
     {
-        $user = new ProfileController();
-        $user = $user->me();
-
-        if ( !($this->isLiked($user->user_id,$idPhoto)) ) {
-            $pictureRate = new PictureRating($user->user_id,$idPhoto);
-            $pictureRate->liker();
+        if ( !($this->isLiked($idUser,$idPhoto)) ) {
+            $pictureRate = new PictureRating;
+            $pictureRate->liker($idUser,$idPhoto);
             $pictureRate->save();
         }
     }

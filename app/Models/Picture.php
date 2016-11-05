@@ -27,7 +27,7 @@ class Picture extends Model
 		return $this->belongsTo('App\Models\User');
 	}
 
-    public function PictureRating()
+    public function pictureRating()
     {
         return $this->hasMany('App\Models\PictureRating');
     }

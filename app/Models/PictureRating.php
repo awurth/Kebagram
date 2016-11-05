@@ -13,12 +13,13 @@ class PictureRating extends Model
 {
     protected $table = 'picture_rating';
     protected $primaryKey = 'id';
+    public $timestamps = false;
 
-    public function liker($userId,$pictureId){
+    public function liker($idUser,$idPhoto){
         $this->rate = '1';
-        $this->user_id = $userId;
-        $this->picture_id = $pictureId;
-        $this->update();
+        $this->user_id = $idUser;
+        $this->picture_id = $idPhoto;
+        $this->save();
     }
 
     public function user()
