@@ -43,44 +43,44 @@
                 {% if count > 0 %}
                     <div class="row">
                         {% for picture in pictures %}
-
                             <div class="col-xs-4 photo">
                                 <img data-toggle="modal" data-target="#modal-{{ picture.id }}" src="{{ base_url() }}/{{ picture.getWebPath() }}" alt="Photo">
                             </div>
-
-                        <!-- MODAL -->
-                           <div class="modal fade" id="modal-{{ picture.id }}" tabindex="-1" role="dialog" aria-hidden="true">
-                               <div class="modal-dialog" role="document">
-                                   <div class="modal-content">
-                                       <div class="row">
-                                       <div class="col-lg-12 photo">
-                                           <img src="{{ base_url() }}/{{ picture.getWebPath() }}" alt="Photo">
-                                       </div>
-                                       <div class="col-lg-12">
-                                           <div class="social">
-                                                <span class="auteur">{{ user.user_name }}</span>
+                            <!-- MODAL -->
+                            <div class="modal fade" id="modal-{{ picture.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="row">
+                                            <div class="col-lg-12 photo">
+                                                <img src="{{ base_url() }}/{{ picture.getWebPath() }}" alt="Photo">
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="social">
+                                                    <span class="auteur">{{ user.user_name }}</span>
                                                 <span class="pull-right">
                                                      <form action="{{ path_for('photo.like') }}" method="post">
                                                          {{ csrf.field | raw }}
                                                          <input type="hidden" name="idPhoto" value="{{ picture.id }}"/>
                                                          <input type="hidden" name="userTarget" value="{{ user.user_slug }}"/>
-                                                        {% if picture.pictureRating.empty() %}
-                                                            <input type="hidden" name="what" value="like"/>
-                                                            <a href="#" onclick="$(this).closest('form').submit()"  title="Looks good!"><i  class="material-icons">favorite_border</i></a>
-                                                        {% else %}
-                                                            <input type="hidden" name="what" value="dislike"/>
-                                                            <a href="#" onclick="$(this).closest('form').submit()" title="I don't like it anymore"><i style="color:red;" class="material-icons">favorite</i></a>
-                                                        {% endif %}
-                                                    </form>
+                                                         {% if picture.pictureRating.empty() %}
+                                                             <input type="hidden" name="what" value="like"/>
+                                                             <a href="#" onclick="$(this).closest('form').submit()"  title="Looks good!"><i  class="material-icons">favorite_border</i></a>
+                                                         {% else %}
+                                                             <input type="hidden" name="what" value="dislike"/>
+                                                             <a href="#" onclick="$(this).closest('form').submit()" title="I don't like it anymore"><i style="color:red;" class="material-icons">favorite</i></a>
+                                                         {% endif %}
+                                                     </form>
                                                 </span>
-                                                <hr>
-                                                <p class="photo-description">{{ picture.description }}</p>
-                                           </div>
-                                       </div>
-                                   </div>
-                               </div>
-                        </div>
-                            {% endfor %}
+                                                    <hr>
+                                                    <p class="photo-description">{{ picture.description }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        {% endfor %}
 
                 {% else %}
                     <p class="text-center">{{ user.user_name }} does not have any pictures yet</p>
