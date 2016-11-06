@@ -111,7 +111,3 @@ $container['PictureController'] = function ($container) {
 $container['SocialController'] = function ($container) {
     return new \App\Controllers\SocialController($container);
 };
-
-$container['UserController'] = function ($container) {
-    return new \App\Controllers\UserController($container);
-};
