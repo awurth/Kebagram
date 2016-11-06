@@ -7,6 +7,7 @@
         <div class="page-header">
             <h1>Results for: {{ q }}</h1>
         </div>
+        {% if users %}
         <div class="list-group">
             {% if users.empty %}
                 <p>No results found for {{ q }}</p>
@@ -26,6 +27,29 @@
                 </div>
             {% endfor %}
         </div>
+        {% else %}
+            {% if posts.empty %}
+                <p>No results found for {{ q }}</p>
+            {% endif %}
+            {% for post in posts %}
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2 feed">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <a href="{{ path_for('user.profile', {'slug': post.user_slug}) }}" class="post-username">{{ post.user_name }}</a>
+                                <span class="pull-right">{{ diffForHumans(post.created_at) }}</span>
+                            </div>
+                            <div class="panel-body">
+                                <img src="{{ base_url() }}/uploads/images/kebabs/{{ post.id }}.jpg" width="100%" alt="Kebab">
+                                <div class="post-caption">
+                                    <a href="{{ path_for('user.profile', {'slug': post.user_slug}) }}" class="post-username">{{ post.user_name }}</a> <span class="post-description">{{ post.description|hashtag }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
     </div>
 </div>
 

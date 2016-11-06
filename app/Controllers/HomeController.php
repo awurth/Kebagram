@@ -2,7 +2,9 @@
 
 namespace App\Controllers;
 
+use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
+use Slim\Exception\NotFoundException;
 
 class HomeController extends Controller
 {
@@ -27,15 +29,37 @@ class HomeController extends Controller
 
     public function search($request, $response)
     {
-        if (!$request->getParam('q')) {
+        $query = $request->getParam('q');
+
+        if (!$query) {
             throw new NotFoundException($request, $response);
         }
 
-        $users = User::where('user_name', 'like', '%' . $request->getParam('q') . '%')->get();
+        $users = null;
+        $posts = null;
 
-        return $this->view->render($response, 'user/search.twig', [
+        if (starts_with($query, '#')) {
+            $posts = $this->getPostsWithHashtag(substr($query, 1));
+        } else {
+            $users = User::where('user_name', 'like', '%' . $request->getParam('q') . '%')->get();
+        }
+
+        return $this->view->render($response, 'search.twig', [
             'users' => $users,
+            'posts' => $posts,
             'q' => $request->getParam('q')
         ]);
+    }
+
+    private function getPostsWithHashtag($hashtag)
+    {
+        $posts = DB::table('picture')
+            ->select(['picture.id', 'description', 'picture.created_at', 'picture.updated_at', 'user_name', 'user_slug'])
+            ->leftJoin('users', 'picture.user_id', '=', 'users.user_id')
+            ->where('tags', 'like', '%' . $hashtag . '%')
+            ->orderBy('picture.created_at', 'desc')
+            ->get();
+
+        return $posts;
     }
 }
