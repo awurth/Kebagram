@@ -12,7 +12,8 @@ $capsule->addConnection($config['settings']['db']);
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
 
-Manager::schema()->dropIfExists('photos');
+Manager::schema()->dropIfExists('picture_rating');
+Manager::schema()->dropIfExists('picture');
 Manager::schema()->dropIfExists('users');
 Manager::schema()->dropIfExists('subscription');
 
@@ -47,6 +48,15 @@ Manager::schema()->create('picture', function (Blueprint $table) {
     $table->timestamps();
     $table->integer('user_id')->unsigned();
     $table->foreign('user_id')->references('user_id')->on('users');
+});
+
+Manager::schema()->create('picture_rating', function (Blueprint $table) {
+    $table->increments('id');
+    $table->boolean('rate');
+    $table->integer('user_id')->unsigned();
+    $table->integer('picture_id')->unsigned();
+    $table->foreign('user_id')->references('user_id')->on('users');
+    $table->foreign('picture_id')->references('id')->on('picture');
 });
 
 Manager::schema()->create('subscription', function (Blueprint $table) {
