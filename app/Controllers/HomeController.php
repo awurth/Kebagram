@@ -24,4 +24,18 @@ class HomeController extends Controller
             'posts' => $posts
         ]);
     }
+
+    public function search($request, $response)
+    {
+        if (!$request->getParam('q')) {
+            throw new NotFoundException($request, $response);
+        }
+
+        $users = User::where('user_name', 'like', '%' . $request->getParam('q') . '%')->get();
+
+        return $this->view->render($response, 'user/search.twig', [
+            'users' => $users,
+            'q' => $request->getParam('q')
+        ]);
+    }
 }
