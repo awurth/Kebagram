@@ -34,6 +34,7 @@ $container['view'] = function ($container) {
     ));
     $view->addExtension(new Twig_Extension_Debug());
     $view->addExtension(new App\TwigExtension\DiffForHumans());
+    $view->addExtension(new \App\TwigExtension\Hashtag($container->router));
 
     $view->getEnvironment()->addGlobal('auth', [
         'check' => $container->auth->check(),
