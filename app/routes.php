@@ -11,7 +11,7 @@ use App\Middleware\SubscriberMiddleware;
 $app->get('/', 'HomeController:index')->setName('home');
 
 $app->get('/user/{slug}', 'ProfileController:view')->setName('user.profile');
-$app->get('/search', 'UserController:search')->setName('user.search');
+$app->get('/search', 'UserController:search')->setName('search');
 
 $app->group('', function () {
     $this->get('/signup', 'AuthController:getSignUp')->setName('auth.signup');
