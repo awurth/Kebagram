@@ -47,7 +47,6 @@ Manager::schema()->create('picture', function (Blueprint $table) {
     $table->increments('id');
     $table->text('description');
     $table->text('url');
-    $table->text('tags')->nullable();
     $table->timestamps();
     $table->integer('user_id')->unsigned();
     $table->foreign('user_id')->references('user_id')->on('users');
