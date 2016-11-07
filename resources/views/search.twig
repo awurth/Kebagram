@@ -38,6 +38,7 @@
                             <div class="panel-heading">
                                 <a href="{{ path_for('user.profile', {'slug': post.user_slug}) }}" class="post-username">{{ post.user_name }}</a>
                                 <span class="pull-right">{{ diffForHumans(post.created_at) }}</span>
+                                {% if post.location %}<div>{{ post.location }}</div>{% endif %}
                             </div>
                             <div class="panel-body">
                                 <img src="{{ base_url() }}/uploads/images/kebabs/{{ post.id }}.jpg" width="100%" alt="Kebab">

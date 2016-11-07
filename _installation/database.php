@@ -14,11 +14,11 @@ $capsule->bootEloquent();
 
 Manager::schema()->dropIfExists('hashtag_picture');
 Manager::schema()->dropIfExists('hashtag');
+Manager::schema()->dropIfExists('comment');
 Manager::schema()->dropIfExists('picture_rating');
 Manager::schema()->dropIfExists('picture');
-Manager::schema()->dropIfExists('users');
 Manager::schema()->dropIfExists('subscription');
-Manager::schema()->dropIfExists('comment');
+Manager::schema()->dropIfExists('users');
 
 Manager::schema()->create('users', function (Blueprint $table) {
     $table->increments('user_id');
@@ -46,7 +46,7 @@ Manager::schema()->create('users', function (Blueprint $table) {
 Manager::schema()->create('picture', function (Blueprint $table) {
     $table->increments('id');
     $table->text('description');
-    $table->text('url');
+    $table->string('location');
     $table->timestamps();
     $table->integer('user_id')->unsigned();
     $table->foreign('user_id')->references('user_id')->on('users');
