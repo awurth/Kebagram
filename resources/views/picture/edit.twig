@@ -1,0 +1,30 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+
+<div class="row">
+    <div class="col-xs-12 panel add-picture">
+        <div class="page-header">
+            <h1>Edit image</h1>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <form action="{{ path_for('picture.edit', {'id': picture.id}) }}" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="caption">Caption</label>
+                        <textarea name="caption" id="caption" class="form-control">{{ picture.description }}</textarea>
+                    </div>
+
+                    {{ csrf.field|raw }}
+                    <input type="submit" class="btn btn-primary btn-raised" value="Post picture">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ base_url() }}/js/post-picture.js"></script>
+{% endblock %}
