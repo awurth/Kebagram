@@ -3,6 +3,7 @@
 namespace App\Controllers\Auth;
 
 use App\Auth\Auth;
+use App\Controllers\ProfileController;
 use App\Models\User;
 use App\Controllers\Controller;
 use Respect\Validation\Validator as v;
@@ -134,5 +135,46 @@ class AuthController extends Controller
         $text = preg_replace('~[^A-Za-z0-9.]+~', '-', $text);
         return strtolower($text);
     }
+
+    public function forgotPassword($request, $response)
+    {
+        return $this->view->render($response, 'auth/password/forgot.twig');
+    }
+
+    public function changeForgotPassword($request, $response)
+    {
+        if (isset($_POST)) {
+            if($request->getParam('username') && $request->getParam('email')
+                && $request->getParam('password') && $request->getParam('password2')) {
+
+                $username = $request->getParam('username');
+                $email = $request->getParam('email');
+                $mdp = $request->getParam('password');
+                $mdp2 = $request->getParam('password2');
+                $user = User::where("user_name","=",$username)->first();
+                if($user){
+                    if($user->user_email == $email){
+                        if($mdp == $mdp2){
+                            $user->user_password_hash = password_hash($mdp, PASSWORD_DEFAULT);
+                            $user->save();
+                            $this->flash->addMessage('success', 'Success');
+                            return $response->withRedirect($this->router->pathFor('auth.signin'));
+                        }else{
+                            $this->flash->addMessage('error', 'Error, Passwords do not match');
+                            return $response->withRedirect($this->router->pathFor('auth.forgotpassword'));
+                        }
+                    }
+                }
+                $this->flash->addMessage('error', 'Error, The user does not exist');
+                return $response->withRedirect($this->router->pathFor('auth.forgotpassword'));
+            }else{
+                $this->flash->addMessage('error', 'Error, Tout les champs doivent etre remplis');
+                return $response->withRedirect($this->router->pathFor('auth.forgotpassword'));
+            }
+
+        }
+        return $this->view->render($response, 'auth/password/forgot.twig');
+    }
+
 
 }

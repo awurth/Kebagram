@@ -1,0 +1,45 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="well" >
+            <h2>Forgot Password</h2>
+            <div>
+                <form action="{{ path_for('auth.forgotpassword') }}" method="post" autocomplete="off">
+                    <div>
+                        <input  required type="text" placeholder="Username" class="form-control" name="username">
+                        <input  required type="email" placeholder="E-Mail" class="form-control" name="email">
+                        <input  required type="password" placeholder="New Password" class="form-control" name="password">
+                        <input  required type="password" placeholder="Confirm Password" class="form-control" name="password2">
+                    </div>
+                    <p class="text-right">
+                        <button type="submit" class="btn btn-primary">Change Password</button>
+                    </p>
+                    {{  csrf.field | raw }}
+
+                </form>
+            </div>
+
+    </div>
+    </div>
+
+
+
+
+    <!-- dialog samples are at the end of the body to avoid z-index conflicts -->
+
+    <!--  -->
+
+    </p>
+
+
+
+
+
+    </div>
+
+    </div>
+
+
+{% endblock %}
