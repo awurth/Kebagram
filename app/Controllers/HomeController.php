@@ -56,7 +56,9 @@ class HomeController extends Controller
         $posts = DB::table('picture')
             ->select(['picture.id', 'description', 'picture.created_at', 'picture.updated_at', 'user_name', 'user_slug'])
             ->leftJoin('users', 'picture.user_id', '=', 'users.user_id')
-            ->where('tags', 'like', '%' . $hashtag . '%')
+            ->leftJoin('hashtag_picture', 'picture.id', '=', 'hashtag_picture.picture_id')
+            ->leftJoin('hashtag', 'hashtag_picture.hashtag_id', '=', 'hashtag.id')
+            ->where('name', $hashtag)
             ->orderBy('picture.created_at', 'desc')
             ->get();
 
