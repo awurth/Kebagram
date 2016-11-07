@@ -24,7 +24,7 @@ class PictureController extends Controller
         $redirectUrl = $this->router->pathFor('picture.add');
         $caption = $request->getParam('caption');
 
-        if (!v::notEmpty()->validate($caption)) {
+        if (!v::notBlank()->validate($caption)) {
             $this->flash->addMessage('error', 'The caption cannot be empty.');
             return $response->withRedirect($redirectUrl);
         }

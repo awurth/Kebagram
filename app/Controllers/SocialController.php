@@ -2,9 +2,12 @@
 
 namespace App\Controllers;
 
+use App\Models\Comment;
+use App\Models\Picture;
 use App\Models\User;
 use Slim\Exception\NotFoundException;
 use Illuminate\Database\Capsule\Manager as DB;
+use Respect\Validation\Validator as v;
 
 class SocialController extends Controller
 {
@@ -64,5 +67,54 @@ class SocialController extends Controller
 
         $this->flash->addMessage('success', 'You have unfollowed ' . $user->user_name . '!');
         return $response->withRedirect($this->router->pathFor('user.profile', ['slug' => $user->user_slug]));
+    }
+
+    public function postComment($request, $response, $args)
+    {
+        if (!v::notBlank()->validate($request->getParam('content'))) {
+            $this->flash->addMessage('error', 'Your comment cannot be empty!');
+            return $response->withRedirect($this->router->pathFor('home'));
+        }
+
+        $picture = Picture::find($args['id']);
+
+        if (!$picture) {
+            throw new NotFoundException($request, $response);
+        }
+
+        $comment = new Comment();
+        $comment->content = $request->getParam('content');
+        $comment->user()->associate($this->auth->user());
+        $comment->picture()->associate($picture);
+        $comment->save();
+
+        $this->flash->addMessage('success', 'Comment added successfully!');
+        return $response->withRedirect($this->router->pathFor('home'));
+    }
+
+    public function getComments($request, $response, $args)
+    {
+        $comments = Comment::with('user')->where('picture_id', $args['id'])->get();
+
+        return $this->view->render($response, 'social/comments.twig', ['comments' => $comments]);
+    }
+
+    public function deleteComment($request, $response, $args)
+    {
+        $comment = Comment::find($args['id']);
+
+        if (!$comment) {
+            throw new NotFoundException($request, $response);
+        }
+
+        if ($comment->user != $this->auth->user()) {
+            $this->flash->addMessage('error', 'This comment does not belong to you!');
+            return $response->withRedirect($this->router->pathFor('home'));
+        }
+
+        $comment->delete();
+
+        $this->flash->addMessage('success', 'Your comment has been deleted.');
+        return $response->withRedirect($this->router->pathFor('home'));
     }
 }

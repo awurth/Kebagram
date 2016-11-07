@@ -14,6 +14,14 @@
                     <img src="{{ base_url() }}/uploads/images/kebabs/{{ post.id }}.jpg" width="100%" alt="Kebab">
                     <div class="post-caption">
                         <a href="{{ path_for('user.profile', {'slug': post.user_slug}) }}" class="post-username">{{ post.user_name }}</a> <span class="post-description">{{ post.description|hashtag }}</span>
+                        <hr>
+                    </div>
+                    <div class="post-comments">
+                        <a href="#" class="display-comments" data-post-id="{{ post.id }}" data-url="{{ path_for('comment.get', {'id': post.id}) }}">Display comments</a>
+                        <form action="{{ path_for('comment.add', {'id': post.id}) }}" method="POST">
+                            <input type="text" name="content" class="form-control" placeholder="Post a comment...">
+                            {{ csrf.field|raw }}
+                        </form>
                     </div>
                 </div>
             </div>
@@ -21,4 +29,8 @@
     </div>
 {% endfor %}
 
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ base_url() }}/js/load-comments.js"></script>
 {% endblock %}
