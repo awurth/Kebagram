@@ -45,8 +45,14 @@ class ProfileController extends Controller
                         ->where('follower_id', $user->user_id)
                         ->count();
 
+        $default = 'uploads/images/users/default.png';
+        $pp = Picture::getWebPathPP($user->user_id);
+
+        $file = file_exists($pp) ? $pp: $default;
+
         return $this->view->render($response, 'profiles/view.twig', [
             'user' => $user,
+            'profile_picture' => $file,
             'pictures' => $pictures,
             'count' => $count,
             'pages' => ceil($count / 9),

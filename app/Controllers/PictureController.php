@@ -19,6 +19,48 @@ class PictureController extends Controller
         return $this->view->render($response, 'picture/new.twig');
     }
 
+    private function secretKey()
+    {
+        return sha1($user->user_id.$user->user_slug);
+    }
+
+
+    public function changeProfilePicture($request,$response)
+    {
+        $user = $this->auth->user();
+        $redirectUrl = $this->router->pathFor('user.profile',['slug' => $user->user_slug]);
+        $file = new UploadedFile('picture-file', true);
+        $path = 'uploads/images/users/';
+
+        if (!$file->isValid()) {
+            $this->flash->addMessage('error', 'An error occured while attempting to upload the image.');
+            return $response->withRedirect($redirectUrl);
+        }
+
+        if ($file->isUploaded()) {
+            $fileUploader = new FileUploader($file, 2000000, $path, FileUploader::TYPE_IMG);
+
+            if (!$fileUploader->checkExtension()) {
+                $this->flash->addMessage('error', 'Unknown file extension.');
+                return $response->withRedirect($redirectUrl);
+            }
+
+            if (!$fileUploader->checkFileSize()) {
+                $this->flash->addMessage('error', 'The file is too large. Max file size: 2MB.');
+                return $response->withRedirect($redirectUrl);
+            }
+
+            $image = $this->makeImage($file->getTempName());
+            $image->save($path . $user->user_id . '.jpg');
+
+            $this->flash->addMessage('success', 'Picture edited successfully!');
+            return $response->withRedirect($redirectUrl);
+        }
+
+        $this->flash->addMessage('error', 'An image file is required.');
+        return $response->withRedirect($redirectUrl);
+    }
+
     public function postAdd($request, $response)
     {
         $redirectUrl = $this->router->pathFor('picture.add');

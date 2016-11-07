@@ -3,13 +3,11 @@
     margin: 50px 25px;
     width: 200px;
     height: 200px;
-    background-color: #CCCCCC;
+    background-size:cover;
     border-radius: 50%;
 }
 
-.avatar > img {
-    width: 100%;
-}
+
 
 .avatar, .profile-info {
     display: inline-block;
