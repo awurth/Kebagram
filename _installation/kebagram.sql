@@ -2,10 +2,10 @@
 -- version 4.5.4.1deb2ubuntu2
 -- http://www.phpmyadmin.net
 --
--- Client :  localhost
--- Généré le :  Mer 02 Novembre 2016 à 18:08
--- Version du serveur :  5.7.16-0ubuntu0.16.04.1
--- Version de PHP :  7.0.8-0ubuntu0.16.04.3
+-- Host: localhost
+-- Generation Time: Nov 07, 2016 at 02:11 PM
+-- Server version: 5.7.16-0ubuntu0.16.04.1
+-- PHP Version: 7.0.8-0ubuntu0.16.04.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,18 +17,34 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données :  `kebagram`
+-- Database: `kebagram`
 --
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `picture`
+-- Table structure for table `comment`
+--
+
+CREATE TABLE `comment` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `content` text COLLATE utf8_unicode_ci NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `picture_id` int(10) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `picture`
 --
 
 CREATE TABLE `picture` (
   `id` int(10) UNSIGNED NOT NULL,
   `description` text COLLATE utf8_unicode_ci NOT NULL,
+  `tags` text COLLATE utf8_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `user_id` int(10) UNSIGNED NOT NULL
@@ -37,7 +53,20 @@ CREATE TABLE `picture` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `subscription`
+-- Table structure for table `picture_rating`
+--
+
+CREATE TABLE `picture_rating` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `rate` tinyint(1) NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `picture_id` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `subscription`
 --
 
 CREATE TABLE `subscription` (
@@ -49,7 +78,7 @@ CREATE TABLE `subscription` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
@@ -77,25 +106,41 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Index pour les tables exportées
+-- Indexes for dumped tables
 --
 
 --
--- Index pour la table `picture`
+-- Indexes for table `comment`
+--
+ALTER TABLE `comment`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `comment_user_id_foreign` (`user_id`),
+  ADD KEY `comment_picture_id_foreign` (`picture_id`);
+
+--
+-- Indexes for table `picture`
 --
 ALTER TABLE `picture`
   ADD PRIMARY KEY (`id`),
   ADD KEY `picture_user_id_foreign` (`user_id`);
 
 --
--- Index pour la table `subscription`
+-- Indexes for table `picture_rating`
+--
+ALTER TABLE `picture_rating`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `picture_rating_user_id_foreign` (`user_id`),
+  ADD KEY `picture_rating_picture_id_foreign` (`picture_id`);
+
+--
+-- Indexes for table `subscription`
 --
 ALTER TABLE `subscription`
   ADD PRIMARY KEY (`follower_id`,`followed_id`),
   ADD KEY `subscription_followed_id_foreign` (`followed_id`);
 
 --
--- Index pour la table `users`
+-- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`user_id`),
@@ -104,31 +149,55 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `users_user_email_unique` (`user_email`);
 
 --
--- AUTO_INCREMENT pour les tables exportées
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT pour la table `picture`
+-- AUTO_INCREMENT for table `comment`
+--
+ALTER TABLE `comment`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT for table `picture`
 --
 ALTER TABLE `picture`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 --
--- AUTO_INCREMENT pour la table `users`
+-- AUTO_INCREMENT for table `picture_rating`
+--
+ALTER TABLE `picture_rating`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
--- Contraintes pour les tables exportées
+-- Constraints for dumped tables
 --
 
 --
--- Contraintes pour la table `picture`
+-- Constraints for table `comment`
+--
+ALTER TABLE `comment`
+  ADD CONSTRAINT `comment_picture_id_foreign` FOREIGN KEY (`picture_id`) REFERENCES `picture` (`id`),
+  ADD CONSTRAINT `comment_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+
+--
+-- Constraints for table `picture`
 --
 ALTER TABLE `picture`
   ADD CONSTRAINT `picture_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
 
 --
--- Contraintes pour la table `subscription`
+-- Constraints for table `picture_rating`
+--
+ALTER TABLE `picture_rating`
+  ADD CONSTRAINT `picture_rating_picture_id_foreign` FOREIGN KEY (`picture_id`) REFERENCES `picture` (`id`),
+  ADD CONSTRAINT `picture_rating_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+
+--
+-- Constraints for table `subscription`
 --
 ALTER TABLE `subscription`
   ADD CONSTRAINT `subscription_followed_id_foreign` FOREIGN KEY (`followed_id`) REFERENCES `users` (`user_id`),
