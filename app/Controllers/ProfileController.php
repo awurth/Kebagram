@@ -128,7 +128,6 @@ class ProfileController extends Controller
                         $this->flash->addMessage('error', 'Error, your password needs at least 6 characters');
                     }
                     return $response->withRedirect($this->router->pathFor("edit.account"));
-                    break;
 
                 case "username":
                     if ($this->usernameAvailable($request->getParam('username'))) {
@@ -138,7 +137,7 @@ class ProfileController extends Controller
                         $user->save();
                     }
                     return $response->withRedirect($this->router->pathFor("edit.account"));
-                    break;
+
 
                 case "email":
                     if ($this->emailAvailable($request->getParam('email'))) {
@@ -147,13 +146,43 @@ class ProfileController extends Controller
                         $user->save();
                     }
                     return $response->withRedirect($this->router->pathFor("edit.account"));
+
+
+                case "description":
+                $description = $request->getParam('description');
+
+                if (strlen($description) > 151 ) {
+                    $this->flash->addMessage('error', 'Your description reached the limit (150 characters)');
+                    return $response->withRedirect($this->router->pathFor("edit.account"));
+                }else{
+                    $user = $this->me();
+                    $user->description = $description;
+                    $user->save();
+                    $this->flash->addMessage('success', 'Your description has changed');
+                    return $response->withRedirect($this->router->pathFor("edit.account"));
+                }
+                break;
+
+                case "location":
+                    $location = $request->getParam('location');
+
+                    if (strlen($location) > 101 ) {
+                        $this->flash->addMessage('error', 'Your location name reached the limit (100 characters)');
+                        return $response->withRedirect($this->router->pathFor("edit.account"));
+                    }else{
+                        $user = $this->me();
+                        $user->location = $location;
+                        $user->save();
+                        $this->flash->addMessage('success', 'Your location has changed');
+                        return $response->withRedirect($this->router->pathFor("edit.account"));
+                    }
                     break;
+
 
                 case "remove":
                     $user = $this->me();
                     $user->delete();
                     $this->flash->addMessage('info', 'Your account has been successfully deleted');
-                    break;
                 // Pas besoin de break puisque le cas trivial (?) est de retourner à la page d'accueil
             }
         }
