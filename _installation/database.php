@@ -12,6 +12,8 @@ $capsule->addConnection($config['settings']['db']);
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
 
+Manager::schema()->dropIfExists('hashtag_picture');
+Manager::schema()->dropIfExists('hashtag');
 Manager::schema()->dropIfExists('picture_rating');
 Manager::schema()->dropIfExists('picture');
 Manager::schema()->dropIfExists('users');
@@ -76,5 +78,19 @@ Manager::schema()->create('comment', function (Blueprint $table) {
     $table->integer('picture_id')->unsigned();
     $table->timestamps();
     $table->foreign('user_id')->references('user_id')->on('users');
+    $table->foreign('picture_id')->references('id')->on('picture');
+});
+
+Manager::schema()->create('hashtag', function (Blueprint $table) {
+    $table->increments('id');
+    $table->string('name');
+    $table->timestamps();
+});
+
+Manager::schema()->create('hashtag_picture', function (Blueprint $table) {
+    $table->integer('hashtag_id')->unsigned();
+    $table->integer('picture_id')->unsigned();
+    $table->primary(['hashtag_id', 'picture_id']);
+    $table->foreign('hashtag_id')->references('id')->on('hashtag');
     $table->foreign('picture_id')->references('id')->on('picture');
 });
