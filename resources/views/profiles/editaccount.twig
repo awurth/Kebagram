@@ -69,7 +69,6 @@
                                     <input type="password" placeholder="New password" class="form-control" id="1" name="password1">
                                  </div>
                                  <div class="col-md-5">
-                                    <input type="hidden" name="what" value="password">
                                     <input type="password" required placeholder="Confirm" class="form-control" id="2" name="password2">
                                     {{ csrf.field | raw }}
                                   </div>
@@ -81,6 +80,48 @@
                         <th style="width:20%">Password</th>
                         <td> &#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226; </td>
                         <td style="text-align:right"> <a href="?what=password">Edit</a></td>
+                    {% endif %}
+                </tr>
+
+                <tr>
+                    {% if edit == "location" %}
+                        <th style="width:20%">Location</th>
+                        <td>
+                            <form action="saveEdit" method="POST" id="form">
+                                <div class="col-md-12">
+                                    <input type="hidden" name="what" value="location">
+                                    <input type="text" class="form-control" value = "{{ auth.user.location }}" class="form-control" name="description" />
+                                    {{ csrf.field | raw }}
+                                </div>
+                                <input type="submit" required form="form" class="pull-right btn btn-primary" value="Save" >
+                            </form>
+                        </td>
+                        <td/>
+                    {% else %}
+                        <th style="width:20%">Location</th>
+                        <td> {{ auth.user.location }} </td>
+                        <td style="text-align:right"> <a href="?what=location">Edit</a></td>
+                    {% endif %}
+                </tr>
+
+                <tr>
+                    {% if edit == "description" %}
+                        <th style="width:20%">Description</th>
+                        <td>
+                            <form action="saveEdit" method="POST" id="form">
+                                <div class="col-md-12">
+                                    <input type="hidden" name="what" value="description">
+                                    <textarea class="form-control" class="form-control" name="description">  {{ auth.user.description }}</textarea>
+                                    {{ csrf.field | raw }}
+                                </div>
+                                <input type="submit" required form="form" class="pull-right btn btn-primary" value="Save" >
+                            </form>
+                        </td>
+                        <td/>
+                    {% else %}
+                        <th style="width:20%">Description</th>
+                        <td> {{ auth.user.description }} </td>
+                        <td style="text-align:right"> <a href="?what=description">Edit</a></td>
                     {% endif %}
                 </tr>
 

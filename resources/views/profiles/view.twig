@@ -8,21 +8,16 @@
         <div class="col-xs-12">
             <div class="row">
                 <div class="col-xs-12 panel profile-header">
-                    <<<<<<< HEAD
+
                     {% if auth.check %}
                     {% if auth.user.user_id == user.user_id %}
                     <div data-toggle="modal" data-target="#modal-setting" class="avatar"
                          style="background-image:url('{{ base_url() }}/{{ profile_picture }}');">
                         {% else %}
                         <div class="avatar" style="background-image:url('{{ base_url() }}/{{ profile_picture }}');">
-                            {% endif %}
-                            {% endif %}
-                            =======
-                            <div class="avatar">
-                                <img data-toggle="modal" data-target="#modal-setting"
-                                     src="{{ base_url() }}/{{ pictureProfile.getWebPath() }}" alt="Avatar" class="img-circle">
-                                >>>>>>> master
-                            </div>
+                         {% endif %}
+                     {% endif %}
+                     </div>
                             <div class="profile-info">
                                 <h2>
                                     {{ user.user_name }}
