@@ -11,6 +11,7 @@ use App\Middleware\SubscriberMiddleware;
 $app->get('/', 'HomeController:index')->setName('home');
 
 $app->get('/user/{slug}', 'ProfileController:view')->setName('user.profile');
+$app->get('/search', 'HomeController:search')->setName('search');
 
 $app->group('', function () {
     $this->get('/signup', 'AuthController:getSignUp')->setName('auth.signup');
@@ -29,8 +30,6 @@ $app->group('', function () {
     $this->get('/password/change', 'PasswordController:getChangePassword')->setName('auth.password.change');
     $this->post('/password/change', 'PasswordController:postChangePassword');
 
-    $this->get('/dashboard', 'AuthController:dashboard')->setName('dashboard');
-
     $this->get('/pic/add', 'PictureController:getAdd')->setName('picture.add');
     $this->post('/pic/add', 'PictureController:postAdd');
     $this->post('/pic/relooking', 'PictureController:changeProfilePicture')->setName('profilePicture.add');
@@ -44,8 +43,3 @@ $app->group('', function () {
     $this->get('/admin', 'AdminController:getIndex')->setName('admin.index');
     $this->post('/admin', 'AdminController:postIndex')->setName('admin.post');
 })->add(new AdminMiddleware($container));
-
-/* Subscription */
-$app->get('/subscription', function ($request, $response) {
-    return $this->view->render($response, 'subscriber/index.twig');
-})->add(new SubscriberMiddleware($container));

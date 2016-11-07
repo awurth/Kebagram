@@ -65,6 +65,16 @@ class PictureController extends Controller
     {
         $redirectUrl = $this->router->pathFor('picture.add');
         $caption = $request->getParam('caption');
+        $what = $request->getParam('what');
+
+
+
+        if ($what == "profile") {
+
+        }else{
+
+
+        }
 
         if (!v::notEmpty()->validate($caption)) {
             $this->flash->addMessage('error', 'The caption cannot be empty.');
@@ -90,8 +100,14 @@ class PictureController extends Controller
                 return $response->withRedirect($redirectUrl);
             }
 
+            $tags = array();
+            preg_match_all('/#(\w+)/', $caption, $tags);
+
             $picture = new Picture();
             $picture->description = $caption;
+            if (!empty($tags[1])) {
+                $picture->tags = json_encode($tags[1]);
+            }
             $picture->user()->associate($this->auth->user());
             $picture->save();
 
