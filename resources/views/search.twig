@@ -15,7 +15,12 @@
                 {% for user in users %}
                     <div class="list-group-item">
                         <div class="row-picture">
-                            <img class="circle" src="{{ base_url() }}/uploads/images/kebabs/51.jpg" alt="Avatar">
+                            {% set avatar = user.getAvatarPath() %}
+                            {% if avatar %}
+                                <img class="circle" src="{{ base_url() }}/{{ avatar }}" alt="Avatar">
+                            {% else %}
+                                <img class="circle" src="http://placehold.it/100x100" alt="Avatar">
+                            {% endif %}
                         </div>
                         <div class="row-content">
                             <h4 class="list-group-item-heading"><a href="{{ path_for('user.profile', {'slug': user.user_slug}) }}">{{ user.user_name }}</a></h4>
