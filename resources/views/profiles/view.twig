@@ -8,11 +8,13 @@
         <div class="col-xs-12">
             <div class="row">
                 <div class="col-xs-12 panel profile-header">
+
                     {% if auth.check %}
                         {% if auth.user.user_id == user.user_id %}
                              <div data-toggle="modal" data-target="#modal-setting" class="avatar"
                               style="background-image:url('{{ base_url() }}/{{ profile_picture }}');">
                         {% else %}
+
                              <div class="avatar" style="background-image:url('{{ base_url() }}/{{ profile_picture }}');">
                         {% endif %}
                     {% endif %}</div>
@@ -40,8 +42,8 @@
                                     <li><strong>{{ following }}</strong> following</li>
                                 </ul>
                                 <div class="profile-desc">
-                                    <span class="profile-name">Firstname</span>
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                                    <span class="profile-name">{{ user.location }}</span>
+                                    {{ user.description }}
                                 </div>
                             </div>
                         </div>

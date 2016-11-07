@@ -19,11 +19,6 @@ class PictureController extends Controller
         return $this->view->render($response, 'picture/new.twig');
     }
 
-    private function secretKey()
-    {
-        return sha1($user->user_id.$user->user_slug);
-    }
-
 
     public function changeProfilePicture($request,$response)
     {
@@ -65,16 +60,6 @@ class PictureController extends Controller
     {
         $redirectUrl = $this->router->pathFor('picture.add');
         $caption = $request->getParam('caption');
-        $what = $request->getParam('what');
-
-
-
-        if ($what == "profile") {
-
-        }else{
-
-
-        }
 
         if (!v::notBlank()->validate($caption)) {
             $this->flash->addMessage('error', 'The caption cannot be empty.');
