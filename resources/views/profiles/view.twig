@@ -64,7 +64,7 @@
                                                          <input type="hidden" name="userTarget" value="{{ user.user_slug }}"/>
                                                          {% if picture.pictureRating.empty() %}
                                                              <input type="hidden" name="what" value="like"/>
-                                                             <a href="#" onclick="$(this).closest('form').submit()"  title="Looks good!"><i  class="material-icons">favorite_border</i></a>
+                                                             <a href="#" onclick="$(this).closest('form').submit()" title="Looks good!"><i class="material-icons">favorite_border</i></a>
                                                          {% else %}
                                                              <input type="hidden" name="what" value="dislike"/>
                                                              <a href="#" onclick="$(this).closest('form').submit()" title="I don't like it anymore"><i style="color:red;" class="material-icons">favorite</i></a>
