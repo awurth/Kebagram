@@ -61,9 +61,15 @@ class PictureController extends Controller
     {
         $redirectUrl = $this->router->pathFor('picture.add');
         $caption = $request->getParam('caption');
+        $location = $request->getParam('location');
 
         if (!v::notBlank()->validate($caption)) {
             $this->flash->addMessage('error', 'The caption cannot be empty.');
+            return $response->withRedirect($redirectUrl);
+        }
+
+        if (!v::notBlank()->validate($location)) {
+            $this->flash->addMessage('error', 'Please tell us where you bought your kebab.');
             return $response->withRedirect($redirectUrl);
         }
 
@@ -88,6 +94,7 @@ class PictureController extends Controller
 
             $picture = new Picture();
             $picture->description = $caption;
+            $picture->location = $location;
             $picture->user()->associate($this->auth->user());
             $picture->save();
 
