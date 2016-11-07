@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\Hashtag;
 use App\Models\PictureRating;
 use Intervention\Image\Image;
 use Respect\Validation\Validator as v;
@@ -100,14 +101,24 @@ class PictureController extends Controller
                 return $response->withRedirect($redirectUrl);
             }
 
+            $picture = new Picture();
+            $picture->description = $caption;
+            $picture->user()->associate($this->auth->user());
+            $picture->save();
+
             $tags = array();
             preg_match_all('/#(\w+)/', $caption, $tags);
 
-            $picture = new Picture();
-            $picture->description = $caption;
-            $picture->tags = json_encode($tags[1]);
-            $picture->user()->associate($this->auth->user());
-            $picture->save();
+            foreach ($tags[1] as $tag) {
+                $hashtag = Hashtag::where('name', $tag)->first();
+                if (!$hashtag) {
+                    $hashtag = new Hashtag();
+                    $hashtag->name = $tag;
+                    $hashtag->save();
+                }
+
+                $picture->hashtags()->attach($hashtag->id);
+            }
 
             $image = $this->makeImage($file->getTempName());
 
