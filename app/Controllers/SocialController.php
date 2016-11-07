@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\Comment;
+use App\Models\Hashtag;
 use App\Models\Picture;
 use App\Models\User;
 use Slim\Exception\NotFoundException;
@@ -84,17 +85,25 @@ class SocialController extends Controller
             throw new NotFoundException($request, $response);
         }
 
-        $tags = array();
-        preg_match_all('/#(\w+)/', $content, $tags);
-
         $comment = new Comment();
-        $comment->content = $request->getParam('content');
+        $comment->content = $content;
         $comment->user()->associate($this->auth->user());
         $comment->picture()->associate($picture);
         $comment->save();
 
-        $picture->tags = json_encode(array_merge(json_decode($picture->tags), $tags[1]));
-        $picture->save();
+        $tags = array();
+        preg_match_all('/#(\w+)/', $content, $tags);
+
+        foreach ($tags[1] as $tag) {
+            $hashtag = Hashtag::where('name', $tag)->first();
+            if (!$hashtag) {
+                $hashtag = new Hashtag();
+                $hashtag->name = $tag;
+                $hashtag->save();
+            }
+
+            $picture->hashtags()->attach($hashtag->id);
+        }
 
         $this->flash->addMessage('success', 'Comment added successfully!');
         return $response->withRedirect($this->router->pathFor('home'));
