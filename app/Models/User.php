@@ -16,12 +16,11 @@ class User extends Model
         'user_password_hash',
     ];
 
-/**
-* Change the password
-*
-* @param string $password
-*
-*/
+    public function getAvatarPath()
+    {
+        return file_exists(__DIR__ . '/../../public/uploads/images/users/' . $this->user_id . '.jpg') ? 'uploads/images/users/' . $this->user_id . '.jpg' : '';
+    }
+
     public function setPassword($password)
     {
         $this->update([
@@ -39,11 +38,6 @@ class User extends Model
         return $this->belongsToMany('App\Models\User', 'subscription', 'followed_id', 'follower_id');
     }
 
-    /**
-    * The user has one picture.
-    *
-    * @return mixed
-    */
     public function pictures()
     {
         return $this->hasMany('App\Models\Picture');
@@ -53,19 +47,4 @@ class User extends Model
     {
         return $this->hasMany('App\Models\PictureRating');
     }
-
-
-    /**
-    * Check if the user has a valid subscription
-    *
-    * @return bool
-    */
-    public function hasSubscription()
-    {
-        $dueDate = new \DateTime(User::find($_SESSION['user_id'])->subscription->due_date);
-        $todaysDate = new \DateTime();
-
-        return $todaysDate <= $dueDate;
-    }
-
 }
