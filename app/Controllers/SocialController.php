@@ -71,7 +71,9 @@ class SocialController extends Controller
 
     public function postComment($request, $response, $args)
     {
-        if (!v::notBlank()->validate($request->getParam('content'))) {
+        $content = $request->getParam('content');
+
+        if (!v::notBlank()->validate($content)) {
             $this->flash->addMessage('error', 'Your comment cannot be empty!');
             return $response->withRedirect($this->router->pathFor('home'));
         }
@@ -82,11 +84,17 @@ class SocialController extends Controller
             throw new NotFoundException($request, $response);
         }
 
+        $tags = array();
+        preg_match_all('/#(\w+)/', $content, $tags);
+
         $comment = new Comment();
         $comment->content = $request->getParam('content');
         $comment->user()->associate($this->auth->user());
         $comment->picture()->associate($picture);
         $comment->save();
+
+        $picture->tags = json_encode(array_merge(json_decode($picture->tags), $tags[1]));
+        $picture->save();
 
         $this->flash->addMessage('success', 'Comment added successfully!');
         return $response->withRedirect($this->router->pathFor('home'));

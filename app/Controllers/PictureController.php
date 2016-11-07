@@ -53,9 +53,7 @@ class PictureController extends Controller
 
             $picture = new Picture();
             $picture->description = $caption;
-            if (!empty($tags[1])) {
-                $picture->tags = json_encode($tags[1]);
-            }
+            $picture->tags = json_encode($tags[1]);
             $picture->user()->associate($this->auth->user());
             $picture->save();
 
