@@ -11,6 +11,7 @@ use App\Models\Picture;
 use App\Upload\FileUploader;
 use App\Upload\UploadedFile;
 use App\Controllers\ProfileController;
+use Slim\Exception\NotFoundException;
 
 class PictureController extends Controller
 {
@@ -152,6 +153,54 @@ class PictureController extends Controller
 
         $this->flash->addMessage('error', 'An image file is required.');
         return $response->withRedirect($redirectUrl);
+    }
+
+    public function getEdit($request, $response, $args)
+    {
+        $picture = Picture::find($args['id']);
+
+        if (!$picture) {
+            throw new NotFoundException($request, $response);
+        }
+
+        return $this->view->render($response, 'picture/edit.twig', [
+            'picture' => $picture
+        ]);
+    }
+
+    public function postEdit($request, $response, $args)
+    {
+        $picture = Picture::find($args['id']);
+
+        if (!$picture) {
+            throw new NotFoundException($request, $response);
+        }
+
+        $user = $this->auth->user();
+
+        if ($picture->user_id !== $user->user_id) {
+            throw new \Exception('This picture does not belong to you!');
+        }
+
+        $caption = $request->getParam('caption');
+
+        if (!v::notBlank()->validate($caption)) {
+            $this->flash->addMessage('error', 'The caption cannot be empty.');
+            return $response->withRedirect($this->router->pathFor('picture.edit', [
+                'id' => $picture->id
+            ]));
+        }
+
+        /*$tags = array();
+        preg_match_all('/#(\w+)/', $caption, $newTags);*/
+
+        $picture->description = $caption;
+        $picture->save();
+
+        $this->flash->addMessage('success', 'Picture edited successfully!');
+        return $response->withRedirect($this->router->pathFor('user.profile', [
+            'slug' => $user->user_slug
+        ]));
     }
 
     private function makeImage($src)
