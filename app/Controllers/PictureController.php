@@ -34,7 +34,7 @@ class PictureController extends Controller
 
         }
 
-        if (!v::notEmpty()->validate($caption)) {
+        if (!v::notBlank()->validate($caption)) {
             $this->flash->addMessage('error', 'The caption cannot be empty.');
             return $response->withRedirect($redirectUrl);
         }
@@ -63,9 +63,7 @@ class PictureController extends Controller
 
             $picture = new Picture();
             $picture->description = $caption;
-            if (!empty($tags[1])) {
-                $picture->tags = json_encode($tags[1]);
-            }
+            $picture->tags = json_encode($tags[1]);
             $picture->user()->associate($this->auth->user());
             $picture->save();
 

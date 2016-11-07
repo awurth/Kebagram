@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Auth\Auth;
 use App\Validation\Validator;
 use Slim\Flash\Messages;
+use Slim\Router;
 use Slim\Views\Twig;
 
 /**
@@ -12,6 +13,7 @@ use Slim\Views\Twig;
  * @property Messages flash
  * @property Twig view
  * @property Validator validator
+ * @property Router router
  */
 class Controller
 {

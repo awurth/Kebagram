@@ -29,6 +29,10 @@
     text-transform: capitalize;
 }
 
+hr {
+    margin: 10px 0 0 0;
+}
+
 .feed > .panel {
     margin-top: 50px;
 }
@@ -41,12 +45,12 @@
     padding: 0;
 }
 
-.post-username {
+.post-username, .comment-username, .delete-comment {
     font-weight: bold;
     color: #333333;
 }
 
-.post-username:hover {
+.post-username:hover, .comment-username:hover, .delete-comment:hover {
     text-decoration: none;
     color: #333333;
 }
@@ -57,4 +61,23 @@
 
 .add-picture {
     padding-bottom: 30px;
+}
+
+.post-comments {
+    padding: 0 20px;
+}
+
+.post-comments .form-group {
+    margin: 0;
+}
+
+.comment {
+    position: relative;
+    padding: 5px 0;
+}
+
+.delete-comment {
+    position: absolute;
+    top: 5px;
+    right: 0;
 }
