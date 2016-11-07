@@ -27,6 +27,6 @@ class Mentions extends \Twig_Extension
 
     public function mentions($string)
     {
-        return preg_replace('/(@(\w+))/', '<a href="' . $this->router->pathFor('home') . '/user/$2">$1</a>', $string);
+        return preg_replace('/(@(\w+))/', '<a href="' . $this->router->pathFor('home') . 'user/$2">$1</a>', $string);
     }
 }
