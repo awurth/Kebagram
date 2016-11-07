@@ -35,6 +35,9 @@ $app->group('', function () {
     $this->get('/pic/add', 'PictureController:getAdd')->setName('picture.add');
     $this->post('/pic/add', 'PictureController:postAdd');
     $this->post('/pic/relooking', 'PictureController:changeProfilePicture')->setName('profilePicture.add');
+    $this->get('/pic/{id}/edit', 'PictureController:getEdit')->setName('picture.edit');
+    $this->post('/pic/{id}/edit', 'PictureController:postEdit');
+    $this->get('/pic/{id}/delete', 'PictureController:delete')->setName('picture.delete');
 
     $this->post('/liker', 'PictureController:likeDispatcher')->setName('photo.like');
     $this->get('/user/{slug}/follow', 'SocialController:follow')->setName('user.follow');
