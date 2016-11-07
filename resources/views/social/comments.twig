@@ -4,7 +4,7 @@
         <a href="{{ path_for('user.profile', {'slug': comment.user.user_slug}) }}" class="comment-username">
             {{ comment.user.user_name }}
         </a>
-        <span class="comment-content">{{ comment.content }}</span>
+        <span class="comment-content">{{ comment.content|hashtag }}</span>
         {% if comment.user.user_id == auth.user.user_id %}
             <a href="{{ path_for('comment.delete', {'id': comment.id}) }}" class="delete-comment" title="Delete comment">&times;</a>
         {% endif %}
