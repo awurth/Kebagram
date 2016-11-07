@@ -42,4 +42,8 @@ class Picture extends Model
         return $this->hasMany('App\Models\Comment');
     }
 
+    public function hashtags()
+    {
+        return $this->belongsToMany('App\Models\Hashtag');
+    }
 }
