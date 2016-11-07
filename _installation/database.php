@@ -14,11 +14,11 @@ $capsule->bootEloquent();
 
 Manager::schema()->dropIfExists('hashtag_picture');
 Manager::schema()->dropIfExists('hashtag');
+Manager::schema()->dropIfExists('comment');
 Manager::schema()->dropIfExists('picture_rating');
 Manager::schema()->dropIfExists('picture');
-Manager::schema()->dropIfExists('users');
 Manager::schema()->dropIfExists('subscription');
-Manager::schema()->dropIfExists('comment');
+Manager::schema()->dropIfExists('users');
 
 Manager::schema()->create('users', function (Blueprint $table) {
     $table->increments('user_id');
