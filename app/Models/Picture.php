@@ -17,6 +17,10 @@ class Picture extends Model
         return 'uploads/images/kebabs/' . $this->id . '.jpg';
     }
 
+    public static function getWebPathPP($idUser) {
+        return 'uploads/images/users/' . $idUser . '.jpg';
+    }
+
     public function getRate()
     {
        $this->PictureRating()->count();
@@ -31,4 +35,6 @@ class Picture extends Model
     {
         return $this->hasMany('App\Models\PictureRating');
     }
+
+
 }

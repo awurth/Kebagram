@@ -20,8 +20,8 @@ $app->group('', function () {
 })->add(new GuestMiddleware($container));
 
 $app->group('', function () {
-    $this->get('/signout', 'AuthController:getSignOut')->setName('auth.signout');
 
+    $this->get('/signout', 'AuthController:getSignOut')->setName('auth.signout');
     $this->get('/me', 'ProfileController:editAccount')->setName('edit.account');
 
     $this->post('/saveEdit', 'ProfileController:saveEdit')->setName('saveEdit.account');
@@ -33,6 +33,7 @@ $app->group('', function () {
 
     $this->get('/pic/add', 'PictureController:getAdd')->setName('picture.add');
     $this->post('/pic/add', 'PictureController:postAdd');
+    $this->post('/pic/relooking', 'PictureController:changeProfilePicture')->setName('profilePicture.add');
 
     $this->post('/liker', 'PictureController:likeDispatcher')->setName('photo.like');
     $this->get('/user/{slug}/follow', 'SocialController:follow')->setName('user.follow');
