@@ -7,6 +7,23 @@
     border-radius: 50%;
 }
 
+.avatar-edit:hover{
+
+    opacity: 0.6;
+}
+
+.avatar-edit:hover:before{
+    content: '\e8fc';
+    font-family: 'Material Icons';
+    color: white;
+    font-size:42px;
+    margin-left: 40%;
+    vertical-align:middle;
+    line-height: 200px;
+
+
+}
+
 
 
 .avatar, .profile-info {
