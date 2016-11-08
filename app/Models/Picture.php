@@ -18,7 +18,8 @@ class Picture extends Model
     }
 
     public static function getWebPathPP($idUser) {
-        return 'uploads/images/users/' . $idUser . '.jpg';
+        $image = 'uploads/images/users/'.$idUser.'.jpg';
+        return file_exists($image) ? $image : 'images/default.png';
     }
 
     public function getRate()
