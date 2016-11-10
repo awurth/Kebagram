@@ -217,6 +217,32 @@ class PictureController extends Controller
         ]));
     }
 
+    public function delete($request, $response, $args)
+    {
+        $picture = Picture::find($args['id']);
+
+        if (!$picture) {
+            throw new NotFoundException($request, $response);
+        }
+
+        $user = $this->auth->user();
+
+        if ($picture->user_id !== $user->user_id) {
+            throw new \Exception('This picture does not belong to you!');
+        }
+
+        $picture->hashtags()->detach();
+        $picture->comments()->delete();
+        $picture->pictureRating()->delete();
+
+        unlink(__DIR__ . '/../../public/' . $picture->getWebPath());
+
+        $picture->delete();
+
+        $this->flash->addMessage('success', 'Picture deleted successfully!');
+        return $response->withRedirect($this->router->pathFor('user.profile', ['slug' => $user->user_slug]));
+    }
+
     private function makeImage($src)
     {
         $manager = new ImageManager(array('driver' => 'gd'));
