@@ -83,7 +83,7 @@ $container['HomeController'] = function ($container) {
 };
 
 $container['AuthController'] = function ($container) {
-    return new App\Controllers\Auth\AuthController($container);
+    return new App\Controllers\AuthController($container);
 };
 
 $container['ProfileController'] = function ($container) {
@@ -91,9 +91,9 @@ $container['ProfileController'] = function ($container) {
 };
 
 $container['PictureController'] = function ($container) {
-    return new \App\Controllers\PictureController($container);
+    return new App\Controllers\PictureController($container);
 };
 
 $container['SocialController'] = function ($container) {
-    return new \App\Controllers\SocialController($container);
+    return new App\Controllers\SocialController($container);
 };
