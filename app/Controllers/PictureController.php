@@ -10,7 +10,6 @@ use Intervention\Image\ImageManager;
 use App\Models\Picture;
 use App\Upload\FileUploader;
 use App\Upload\UploadedFile;
-use Slim\Exception\NotFoundException;
 
 class PictureController extends Controller
 {
@@ -21,16 +20,16 @@ class PictureController extends Controller
     }
 
 
-    public function changeProfilePicture($request,$response)
+    public function changeProfilePicture($request, $response)
     {
         $user = $this->auth->user();
-        $redirectUrl = $this->router->pathFor('user.profile',['slug' => $user->user_slug]);
+        $redirectUrl = $this->router->pathFor('user.profile', ['slug' => $user->user_slug]);
         $file = new UploadedFile('picture-file', true);
         $path = 'uploads/images/users/';
 
         if (!$file->isValid()) {
             $this->flash->addMessage('error', 'An error occured while attempting to upload the image.');
-            return $response->withRedirect($redirectUrl);
+            return $this->redirectTo($response, $redirectUrl);
         }
 
         if ($file->isUploaded()) {
@@ -38,23 +37,23 @@ class PictureController extends Controller
 
             if (!$fileUploader->checkExtension()) {
                 $this->flash->addMessage('error', 'Unknown file extension.');
-                return $response->withRedirect($redirectUrl);
+                return $this->redirectTo($response, $redirectUrl);
             }
 
             if (!$fileUploader->checkFileSize()) {
                 $this->flash->addMessage('error', 'The file is too large. Max file size: 2MB.');
-                return $response->withRedirect($redirectUrl);
+                return $this->redirectTo($response, $redirectUrl);
             }
 
             $image = $this->makeImage($file->getTempName());
             $image->save($path . $user->user_id . '.jpg');
 
             $this->flash->addMessage('success', 'Picture edited successfully!');
-            return $response->withRedirect($redirectUrl);
+            return $this->redirectTo($response, $redirectUrl);
         }
 
         $this->flash->addMessage('error', 'An image file is required.');
-        return $response->withRedirect($redirectUrl);
+        return $this->redirectTo($response, $redirectUrl);
     }
 
     public function postAdd($request, $response)
@@ -65,18 +64,18 @@ class PictureController extends Controller
 
         if (!v::notBlank()->validate($caption)) {
             $this->flash->addMessage('error', 'The caption cannot be empty.');
-            return $response->withRedirect($redirectUrl);
+            return $this->redirectTo($response, $redirectUrl);
         }
 
         if (!v::notBlank()->validate($location)) {
             $this->flash->addMessage('error', 'Please tell us where you bought your kebab.');
-            return $response->withRedirect($redirectUrl);
+            return $this->redirectTo($response, $redirectUrl);
         }
 
         $file = new UploadedFile('picture-file', true);
          if (!$file->isValid()) {
              $this->flash->addMessage('error', 'An error occured while attempting to upload the image.');
-             return $response->withRedirect($redirectUrl);
+             return $this->redirectTo($response, $redirectUrl);
          }
 
         if ($file->isUploaded()) {
@@ -84,12 +83,12 @@ class PictureController extends Controller
 
             if (!$fileUploader->checkExtension()) {
                 $this->flash->addMessage('error', 'Unknown file extension.');
-                return $response->withRedirect($redirectUrl);
+                return $this->redirectTo($response, $redirectUrl);
             }
 
             if (!$fileUploader->checkFileSize()) {
                 $this->flash->addMessage('error', 'The file is too large. Max file size: 2MB.');
-                return $response->withRedirect($redirectUrl);
+                return $this->redirectTo($response, $redirectUrl);
             }
 
             $picture = new Picture();
@@ -147,11 +146,13 @@ class PictureController extends Controller
             $image->save('uploads/images/kebabs/' . $picture->id . '.jpg');
 
             $this->flash->addMessage('success', 'Picture added successfully!');
-            return $response->withRedirect($this->router->pathFor('home'));
+            return $this->redirect($response, 'user.profile', [
+                'slug' => $this->auth->user()->user_slug
+            ]);
         }
 
         $this->flash->addMessage('error', 'An image file is required.');
-        return $response->withRedirect($redirectUrl);
+        return $this->redirectTo($response, $redirectUrl);
     }
 
     public function getEdit($request, $response, $args)
@@ -159,7 +160,7 @@ class PictureController extends Controller
         $picture = Picture::find($args['id']);
 
         if (!$picture) {
-            throw new NotFoundException($request, $response);
+            throw $this->notFoundException($request, $response);
         }
 
         if ($picture->user_id !== $this->auth->user()->user_id) {
@@ -176,7 +177,7 @@ class PictureController extends Controller
         $picture = Picture::find($args['id']);
 
         if (!$picture) {
-            throw new NotFoundException($request, $response);
+            throw $this->notFoundException($request, $response);
         }
 
         $user = $this->auth->user();
@@ -189,9 +190,9 @@ class PictureController extends Controller
 
         if (!v::notBlank()->validate($caption)) {
             $this->flash->addMessage('error', 'The caption cannot be empty.');
-            return $response->withRedirect($this->router->pathFor('picture.edit', [
+            return $this->redirect($response, 'picture.edit', [
                 'id' => $picture->id
-            ]));
+            ]);
         }
 
         // Parse tags in caption saved in database
@@ -212,9 +213,9 @@ class PictureController extends Controller
         $picture->save();
 
         $this->flash->addMessage('success', 'Picture edited successfully!');
-        return $response->withRedirect($this->router->pathFor('user.profile', [
+        return $this->redirect($response, 'user.profile', [
             'slug' => $user->user_slug
-        ]));
+        ]);
     }
 
     public function delete($request, $response, $args)
@@ -222,7 +223,7 @@ class PictureController extends Controller
         $picture = Picture::find($args['id']);
 
         if (!$picture) {
-            throw new NotFoundException($request, $response);
+            throw $this->notFoundException($request, $response);
         }
 
         $user = $this->auth->user();
@@ -240,7 +241,7 @@ class PictureController extends Controller
         $picture->delete();
 
         $this->flash->addMessage('success', 'Picture deleted successfully!');
-        return $response->withRedirect($this->router->pathFor('user.profile', ['slug' => $user->user_slug]));
+        return $this->redirect($response, 'user.profile', ['slug' => $user->user_slug]);
     }
 
     private function makeImage($src)
@@ -282,34 +283,34 @@ class PictureController extends Controller
     }
 
 
-    public function likeDispatcher($request,$response)
+    public function likeDispatcher($request, $response)
     {
         $action = $request->getParam('what');
         $idPhoto = $request->getParam('idPhoto');
         $userTarget = $request->getParam('userTarget');
         $idUser = $this->auth->user()->user_id;
 
-        if ($action && $idPhoto && $idUser && $userTarget){
-            switch($action) {
+        if ($action && $idPhoto && $idUser && $userTarget) {
+            switch ($action) {
                 case 'like' :
-                    $this->likePhoto($idUser,$idPhoto);
+                    $this->likePhoto($idUser, $idPhoto);
                     $this->flash->addMessage('success', '<i class="material-icons">thumb_up</i> Photo liked');
-                    return $response->withRedirect('user/'.$userTarget);
+                    return $this->redirectTo($response, 'user/'.$userTarget);
                 case 'dislike' :
                     $this->dislikePhoto($idUser,$idPhoto);
                     $this->flash->addMessage('error', '<i class="material-icons">thumb_down</i> Photo disliked');
-                    return $response->withRedirect('user/'.$userTarget);
+                    return $this->redirectTo($response, 'user/'.$userTarget);
             }
         }
 
         $this->flash->addMessage('error', 'You just tried a weird thing.');
-        return $response->withRedirect('.');
+        return $this->redirectTo($response, '.');
     }
 
-    private function isLiked($idUser,$idPhoto)
+    private function isLiked($idUser, $idPhoto)
     {
-        $query = PictureRating::where('user_id','=',$idUser)
-                    ->where('picture_id','=',$idPhoto)
+        $query = PictureRating::where('user_id', '=', $idUser)
+                    ->where('picture_id', '=', $idPhoto)
                     ->first();
 
         if ($query == NULL) {
@@ -319,23 +320,23 @@ class PictureController extends Controller
         return true;
     }
 
-    private function dislikePhoto($idUser,$idPhoto)
+    private function dislikePhoto($idUser, $idPhoto)
     {
-        if ( ($this->isLiked($idUser,$idPhoto)) ) {
+        if ($this->isLiked($idUser,$idPhoto)) {
 
-            $like = PictureRating::where('user_id','=',$idUser)
-                ->where('picture_id','=',$idPhoto)
+            $like = PictureRating::where('user_id', '=', $idUser)
+                ->where('picture_id', '=', $idPhoto)
                 ->first();
 
             $like->delete();
         }
     }
 
-    private function likePhoto($idUser,$idPhoto)
+    private function likePhoto($idUser, $idPhoto)
     {
-        if ( !($this->isLiked($idUser,$idPhoto)) ) {
-            $pictureRate = new PictureRating;
-            $pictureRate->liker($idUser,$idPhoto);
+        if ( !($this->isLiked($idUser, $idPhoto)) ) {
+            $pictureRate = new PictureRating();
+            $pictureRate->liker($idUser, $idPhoto);
             $pictureRate->save();
         }
     }
