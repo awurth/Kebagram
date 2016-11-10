@@ -6,24 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Hashtag extends Model
 {
-
     protected $table = 'hashtag';
 
     protected $primaryKey = 'id';
 
-    public static function saveHashtags(Picture $picture, array $tags)
+    public static function saveHashtags(Picture $picture, array $addedTags, array $removedTags)
     {
-        // Parse tags in caption saved in database
-        $oldCaptionTags = array();
-        preg_match_all('/#(\w+)/', $picture->description, $oldCaptionTags);
-
-        // Difference between old and new caption
-        $removedTags = array_diff($oldCaptionTags[1], $tags);
-        $addedTags = array_diff($tags, $oldCaptionTags[1]);
-
         $detach = array();
-        $increments = array();
-        $decrements = array();
 
         $existingTags = $picture->hashtags;
         foreach ($existingTags as $tag) {
@@ -33,18 +22,16 @@ class Hashtag extends Model
                 if ($tag->pivot->count <= 1) {
                     $detach[] = $tag->id;
                 } else {
-                    $decrements[] = [
-                        'id' => $tag->id,
-                        'count' => $tag->pivot->count
-                    ];
+                    $picture->hashtags()->updateExistingPivot($tag->id, [
+                        'count' => $tag->pivot->count - 1
+                    ]);
                 }
             }
 
             if (in_array($tag->name, $addedTags)) {
-                $increments[] = [
-                    'id' => $tag->id,
-                    'count' => $tag->pivot->count
-                ];
+                $picture->hashtags()->updateExistingPivot($tag->id, [
+                    'count' => $tag->pivot->count + 1
+                ]);
             }
         }
 
@@ -57,24 +44,14 @@ class Hashtag extends Model
                 $hashtag->save();
             }
 
-            $picture->hashtags()->attach($hashtag->id, ['count' => 1]);
+            if (!$existingTags->contains('name', $tag)) {
+                $picture->hashtags()->attach($hashtag->id, ['count' => 1]);
+            }
         }
 
         // Detach removed tags from the picture
         if (!empty($detach)) {
             $picture->hashtags()->detach($detach);
-        }
-
-        foreach ($increments as $increment) {
-            $picture->hashtags()->updateExistingPivot($increment['id'], [
-                'count' => $increment['count'] + 1
-            ]);
-        }
-
-        foreach ($decrements as $decrement) {
-            $picture->hashtags()->updateExistingPivot($decrement['id'], [
-                'count' => $decrement['count'] + 1
-            ]);
         }
     }
 

@@ -190,11 +190,19 @@ class PictureController extends Controller
             ]));
         }
 
-        // Parse tags in caption submitted in the form
-        $newCaptionTags = array();
-        preg_match_all('/#(\w+)/', $caption, $newCaptionTags);
+        // Parse tags in caption saved in database
+        $oldTags = array();
+        preg_match_all('/#(\w+)/', $picture->description, $oldTags);
 
-        Hashtag::saveHashtags($picture, $newCaptionTags[1]);
+        // Parse tags in caption submitted in the form
+        $newTags = array();
+        preg_match_all('/#(\w+)/', $caption, $newTags);
+
+        // Difference between old and new caption
+        $removedTags = array_diff($oldTags[1], $newTags[1]);
+        $addedTags = array_diff($newTags[1], $oldTags[1]);
+
+        Hashtag::saveHashtags($picture, $addedTags, $removedTags);
 
         $picture->description = $caption;
         $picture->save();

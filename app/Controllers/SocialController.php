@@ -94,7 +94,7 @@ class SocialController extends Controller
         $tags = array();
         preg_match_all('/#(\w+)/', $content, $tags);
 
-        foreach ($tags[1] as $tag) {
+        /*foreach ($tags[1] as $tag) {
             $hashtag = Hashtag::where('name', $tag)->first();
             if (!$hashtag) {
                 $hashtag = new Hashtag();
@@ -103,7 +103,9 @@ class SocialController extends Controller
             }
 
             $picture->hashtags()->attach($hashtag->id);
-        }
+        }*/
+
+        Hashtag::saveHashtags($picture, $tags[1], array());
 
         $this->flash->addMessage('success', 'Comment added successfully!');
         return $response->withRedirect($this->router->pathFor('home'));
