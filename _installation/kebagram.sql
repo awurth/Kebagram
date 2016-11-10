@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 07, 2016 at 02:11 PM
+-- Generation Time: Nov 10, 2016 at 08:07 AM
 -- Server version: 5.7.16-0ubuntu0.16.04.1
 -- PHP Version: 7.0.8-0ubuntu0.16.04.3
 
@@ -38,13 +38,37 @@ CREATE TABLE `comment` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `hashtag`
+--
+
+CREATE TABLE `hashtag` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `hashtag_picture`
+--
+
+CREATE TABLE `hashtag_picture` (
+  `hashtag_id` int(10) UNSIGNED NOT NULL,
+  `picture_id` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `picture`
 --
 
 CREATE TABLE `picture` (
   `id` int(10) UNSIGNED NOT NULL,
   `description` text COLLATE utf8_unicode_ci NOT NULL,
-  `tags` text COLLATE utf8_unicode_ci,
+  `location` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `user_id` int(10) UNSIGNED NOT NULL
@@ -118,6 +142,19 @@ ALTER TABLE `comment`
   ADD KEY `comment_picture_id_foreign` (`picture_id`);
 
 --
+-- Indexes for table `hashtag`
+--
+ALTER TABLE `hashtag`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `hashtag_picture`
+--
+ALTER TABLE `hashtag_picture`
+  ADD PRIMARY KEY (`hashtag_id`,`picture_id`),
+  ADD KEY `hashtag_picture_picture_id_foreign` (`picture_id`);
+
+--
 -- Indexes for table `picture`
 --
 ALTER TABLE `picture`
@@ -156,12 +193,17 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `comment`
 --
 ALTER TABLE `comment`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT for table `hashtag`
+--
+ALTER TABLE `hashtag`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `picture`
 --
 ALTER TABLE `picture`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `picture_rating`
 --
@@ -171,7 +213,7 @@ ALTER TABLE `picture_rating`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- Constraints for dumped tables
 --
@@ -182,6 +224,13 @@ ALTER TABLE `users`
 ALTER TABLE `comment`
   ADD CONSTRAINT `comment_picture_id_foreign` FOREIGN KEY (`picture_id`) REFERENCES `picture` (`id`),
   ADD CONSTRAINT `comment_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+
+--
+-- Constraints for table `hashtag_picture`
+--
+ALTER TABLE `hashtag_picture`
+  ADD CONSTRAINT `hashtag_picture_hashtag_id_foreign` FOREIGN KEY (`hashtag_id`) REFERENCES `hashtag` (`id`),
+  ADD CONSTRAINT `hashtag_picture_picture_id_foreign` FOREIGN KEY (`picture_id`) REFERENCES `picture` (`id`);
 
 --
 -- Constraints for table `picture`
