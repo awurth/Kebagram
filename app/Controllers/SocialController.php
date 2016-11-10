@@ -6,7 +6,6 @@ use App\Models\Comment;
 use App\Models\Hashtag;
 use App\Models\Picture;
 use App\Models\User;
-use Slim\Exception\NotFoundException;
 use Illuminate\Database\Capsule\Manager as DB;
 use Respect\Validation\Validator as v;
 
@@ -17,7 +16,7 @@ class SocialController extends Controller
         $user = User::where('user_slug', $args['slug'])->first();
 
         if (!$user) {
-            throw new NotFoundException($request, $response);
+            throw $this->notFoundException($request, $response);
         }
 
         $currentUser = $this->auth->user();
@@ -32,13 +31,17 @@ class SocialController extends Controller
             ->first();
 
         if ($subscription) {
-            return $response->withRedirect($this->router->pathFor('user.profile', ['slug' => $user->user_slug]));
+            return $this->redirect($response, 'user.profile', [
+                'slug' => $user->user_slug
+            ]);
         }
 
         $currentUser->following()->attach($user->user_id, ['created_at' => new \DateTime()]);
 
         $this->flash->addMessage('success', 'You are now following ' . $user->user_name . '!');
-        return $response->withRedirect($this->router->pathFor('user.profile', ['slug' => $user->user_slug]));
+        return $this->redirect($response, 'user.profile', [
+            'slug' => $user->user_slug
+        ]);
     }
 
     public function unfollow($request, $response, $args)
@@ -46,13 +49,15 @@ class SocialController extends Controller
         $user = User::where('user_slug', $args['slug'])->first();
 
         if (!$user) {
-            throw new NotFoundException($request, $response);
+            throw $this->notFoundException($request, $response);
         }
 
         $currentUser = $this->auth->user();
 
         if ($user == $currentUser) {
-            return $response->withRedirect($this->router->pathFor('user.profile', ['slug' => $user->user_slug]));
+            return $this->redirect($response, 'user.profile', [
+                'slug' => $user->user_slug
+            ]);
         }
 
         $subscription = DB::table('subscription')
@@ -61,13 +66,17 @@ class SocialController extends Controller
                         ->first();
 
         if (!$subscription) {
-            return $response->withRedirect($this->router->pathFor('user.profile', ['slug' => $user->user_slug]));
+            return $this->redirect($response, 'user.profile', [
+                'slug' => $user->user_slug
+            ]);
         }
 
         $currentUser->following()->detach($user->user_id);
 
         $this->flash->addMessage('success', 'You have unfollowed ' . $user->user_name . '!');
-        return $response->withRedirect($this->router->pathFor('user.profile', ['slug' => $user->user_slug]));
+        return $this->redirect($response, 'user.profile', [
+            'slug' => $user->user_slug
+        ]);
     }
 
     public function postComment($request, $response, $args)
@@ -76,13 +85,13 @@ class SocialController extends Controller
 
         if (!v::notBlank()->validate($content)) {
             $this->flash->addMessage('error', 'Your comment cannot be empty!');
-            return $response->withRedirect($this->router->pathFor('home'));
+            return $this->redirect($response, 'home');
         }
 
         $picture = Picture::find($args['id']);
 
         if (!$picture) {
-            throw new NotFoundException($request, $response);
+            throw $this->notFoundException($request, $response);
         }
 
         $comment = new Comment();
@@ -94,14 +103,16 @@ class SocialController extends Controller
         Hashtag::saveHashtags($picture, Hashtag::parseHashtags($content), array());
 
         $this->flash->addMessage('success', 'Comment added successfully!');
-        return $response->withRedirect($this->router->pathFor('home'));
+        return $this->redirect($response, 'home');
     }
 
     public function getComments($request, $response, $args)
     {
         $comments = Comment::with('user')->where('picture_id', $args['id'])->get();
 
-        return $this->view->render($response, 'social/comments.twig', ['comments' => $comments]);
+        return $this->view->render($response, 'social/comments.twig', [
+            'comments' => $comments
+        ]);
     }
 
     public function deleteComment($request, $response, $args)
@@ -109,12 +120,12 @@ class SocialController extends Controller
         $comment = Comment::find($args['id']);
 
         if (!$comment) {
-            throw new NotFoundException($request, $response);
+            throw $this->notFoundException($request, $response);
         }
 
         if ($comment->user != $this->auth->user()) {
             $this->flash->addMessage('error', 'This comment does not belong to you!');
-            return $response->withRedirect($this->router->pathFor('home'));
+            return $this->redirect($response, 'home');
         }
 
         Hashtag::saveHashtags($comment->picture, array(), Hashtag::parseHashtags($comment->content));
@@ -122,6 +133,6 @@ class SocialController extends Controller
         $comment->delete();
 
         $this->flash->addMessage('success', 'Your comment has been deleted.');
-        return $response->withRedirect($this->router->pathFor('home'));
+        return $this->redirect($response, 'home');
     }
 }

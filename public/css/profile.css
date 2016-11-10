@@ -8,8 +8,8 @@
 }
 
 .avatar-edit:hover{
-
     opacity: 0.6;
+    cursor: pointer;
 }
 
 .avatar-edit:hover:before{

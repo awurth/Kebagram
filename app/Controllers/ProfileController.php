@@ -4,7 +4,6 @@ namespace App\Controllers;
 
 use App\Models\Picture;
 use App\Models\User;
-use Slim\Exception\NotFoundException;
 use Illuminate\Database\Capsule\Manager as DB;
 
 class ProfileController extends Controller
@@ -14,12 +13,12 @@ class ProfileController extends Controller
         $user = User::where('user_slug', $args['slug'])->first();
 
         if (!$user) {
-            throw new NotFoundException($request, $response);
+            throw $this->notFoundException($request, $response);
         }
 
         $page = $request->getParam('page') ? (int) $request->getParam('page') : 1;
 
-        $builder = Picture::with("pictureRating")->where('user_id', $user->user_id);
+        $builder = Picture::with('pictureRating')->where('user_id', $user->user_id);
 
         $count = $builder->count();
 
@@ -30,7 +29,6 @@ class ProfileController extends Controller
         }
 
         $pictures = $builder->get();
-        // GET PICTURES <<<---
 
         $subscription = DB::table('subscription')
                         ->where('follower_id', $this->auth->user()->user_id)
@@ -65,7 +63,10 @@ class ProfileController extends Controller
         if (isset($_GET['what'])) {
             $edit = $_GET['what'];
         }
-        return $this->view->render($response, 'profiles/editaccount.twig',["edit" => $edit]);
+
+        return $this->view->render($response, 'profiles/editaccount.twig', [
+            'edit' => $edit
+        ]);
     }
 
     private function passwordMatches($p, $p2)
@@ -91,7 +92,7 @@ class ProfileController extends Controller
     private function emailAvailable($email)
     {
         if (!(ctype_space($email))) {
-            if ( User::where('user_email',$email)->first() == NULL ) {
+            if (User::where('user_email',$email)->first() == NULL) {
                 $this->flash->addMessage('info', 'Your email address has changed');
                 return true;
             } else {
@@ -112,7 +113,7 @@ class ProfileController extends Controller
     {
         if (isset($_POST)) {
             switch ($request->getParam('what')) {
-                case "password" :
+                case 'password':
                     $mdp = $request->getParam('password');
                     $mdp2 = $request->getParam('password2');
                     if ($this->passwordMatches($mdp, $mdp2)) {
@@ -123,59 +124,59 @@ class ProfileController extends Controller
                     } else {
                         $this->flash->addMessage('error', 'Error, your password needs at least 6 characters');
                     }
-                    return $response->withRedirect($this->router->pathFor("edit.account"));
+                    return $this->redirect($response, 'edit.account');
 
-                case "username":
+                case 'username':
                     if ($this->usernameAvailable($request->getParam('username'))) {
                         $user = $this->me();
                         $user->user_name = $request->getParam('username');
                         $user->user_slug = strtolower($user->user_name);
                         $user->save();
                     }
-                    return $response->withRedirect($this->router->pathFor("edit.account"));
+                    return $this->redirect($response, 'edit.account');
 
 
-                case "email":
+                case 'email':
                     if ($this->emailAvailable($request->getParam('email'))) {
                         $user = $this->me();
                         $user->user_email = $request->getParam('email');
                         $user->save();
                     }
-                    return $response->withRedirect($this->router->pathFor("edit.account"));
+                    return $this->redirect($response, 'edit.account');
 
 
-                case "description":
+                case 'description':
                 $description = $request->getParam('description');
 
                 if (strlen($description) > 151 ) {
                     $this->flash->addMessage('error', 'Your description reached the limit (150 characters)');
-                    return $response->withRedirect($this->router->pathFor("edit.account"));
+                    return $this->redirect($response, 'edit.account');
                 }else{
                     $user = $this->me();
                     $user->description = $description;
                     $user->save();
                     $this->flash->addMessage('success', 'Your description has changed');
-                    return $response->withRedirect($this->router->pathFor("edit.account"));
+                    return $this->redirect($response, 'edit.account');
                 }
                 break;
 
-                case "location":
+                case 'location':
                     $location = $request->getParam('location');
 
-                    if (strlen($location) > 101 ) {
+                    if (strlen($location) > 101) {
                         $this->flash->addMessage('error', 'Your location name reached the limit (100 characters)');
-                        return $response->withRedirect($this->router->pathFor("edit.account"));
-                    }else{
+                        return $this->redirect($response, 'edit.account');
+                    } else {
                         $user = $this->me();
                         $user->location = $location;
                         $user->save();
                         $this->flash->addMessage('success', 'Your location has changed');
-                        return $response->withRedirect($this->router->pathFor("edit.account"));
+                        return $this->redirect($response, 'edit.account');
                     }
                     break;
 
 
-                case "remove":
+                case 'remove':
                     $user = $this->me();
                     $user->delete();
                     $this->flash->addMessage('info', 'Your account has been successfully deleted');
@@ -183,10 +184,6 @@ class ProfileController extends Controller
             }
         }
 
-        return $response->withRedirect($this->router->pathFor('home'));
+        return $this->redirect($response, 'home');
     }
-
-
-
-
 }
