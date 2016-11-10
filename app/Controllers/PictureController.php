@@ -191,8 +191,11 @@ class PictureController extends Controller
             ]));
         }
 
-        /*$tags = array();
-        preg_match_all('/#(\w+)/', $caption, $newTags);*/
+        // Parse tags in caption submitted in the form
+        $newCaptionTags = array();
+        preg_match_all('/#(\w+)/', $caption, $newCaptionTags);
+
+        Hashtag::saveHashtags($picture, $newCaptionTags[1]);
 
         $picture->description = $caption;
         $picture->save();
