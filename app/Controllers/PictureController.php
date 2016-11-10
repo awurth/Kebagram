@@ -162,6 +162,10 @@ class PictureController extends Controller
             throw new NotFoundException($request, $response);
         }
 
+        if ($picture->user_id !== $this->auth->user()->user_id) {
+            throw new \Exception('This picture does not belong to you!');
+        }
+
         return $this->view->render($response, 'picture/edit.twig', [
             'picture' => $picture
         ]);
