@@ -45,7 +45,7 @@
                                 </ul>
                                 <div class="profile-desc">
                                     <span class="profile-name">{{ user.location }}</span>
-                                    {{ user.description }}
+                                    {{ user.description|hashtag|mentions }}
                                 </div>
                             </div>
                         </div>
@@ -86,6 +86,9 @@
                                                              <a href="#" onclick="$(this).closest('form').submit()"
                                                                 title="I don't like it anymore"><i style="color:red;"
                                                                                                    class="material-icons">favorite</i></a>
+                                                         {% endif %}
+                                                         {% if picture.user.user_id == auth.user.user_id %}
+                                                             <a href="{{ path_for('picture.edit', {'id': picture.id}) }}"><i class="material-icons">edit</i></a>
                                                          {% endif %}
                                                      </form>
                                                 </span>
