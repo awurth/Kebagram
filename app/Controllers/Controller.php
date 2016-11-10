@@ -7,6 +7,8 @@ use App\Validation\Validator;
 use Slim\Flash\Messages;
 use Slim\Router;
 use Slim\Views\Twig;
+use Interop\Container\ContainerInterface;
+use Psr\Http\Message\ResponseInterface as Response;
 
 /**
  * @property Auth auth
@@ -19,9 +21,14 @@ class Controller
 {
     protected $container;
 
-    public function __construct($container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+    }
+
+    public function redirect(Response $response, $route, array $params = array())
+    {
+        return $response->withRedirect($this->router->pathFor($route, $params));
     }
 
     public function __get($property)
