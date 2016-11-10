@@ -1,12 +1,7 @@
 <?php
 
-/**
-* Add your "extra" middleware
-*/
 use App\Middleware\AuthMiddleware;
 use App\Middleware\GuestMiddleware;
-use App\Middleware\AdminMiddleware;
-use App\Middleware\SubscriberMiddleware;
 
 $app->get('/', 'HomeController:index')->setName('home');
 
@@ -23,7 +18,6 @@ $app->group('', function () {
 })->add(new GuestMiddleware($container));
 
 $app->group('', function () {
-
     $this->get('/signout', 'AuthController:getSignOut')->setName('auth.signout');
     $this->get('/me', 'ProfileController:editAccount')->setName('edit.account');
 
@@ -47,8 +41,3 @@ $app->group('', function () {
     $this->get('/pic/{id}/comments', 'SocialController:getComments')->setName('comment.get');
     $this->get('/comment/{id}/delete', 'SocialController:deleteComment')->setName('comment.delete');
 })->add(new AuthMiddleware($container));
-
-$app->group('', function () {
-    $this->get('/admin', 'AdminController:getIndex')->setName('admin.index');
-    $this->post('/admin', 'AdminController:postIndex')->setName('admin.post');
-})->add(new AdminMiddleware($container));
