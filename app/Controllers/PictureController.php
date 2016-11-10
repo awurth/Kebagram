@@ -10,7 +10,6 @@ use Intervention\Image\ImageManager;
 use App\Models\Picture;
 use App\Upload\FileUploader;
 use App\Upload\UploadedFile;
-use App\Controllers\ProfileController;
 use Slim\Exception\NotFoundException;
 
 class PictureController extends Controller
