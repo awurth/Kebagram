@@ -91,19 +91,7 @@ class SocialController extends Controller
         $comment->picture()->associate($picture);
         $comment->save();
 
-        $tags = array();
-        preg_match_all('/#(\w+)/', $content, $tags);
-
-        foreach ($tags[1] as $tag) {
-            $hashtag = Hashtag::where('name', $tag)->first();
-            if (!$hashtag) {
-                $hashtag = new Hashtag();
-                $hashtag->name = $tag;
-                $hashtag->save();
-            }
-
-            $picture->hashtags()->attach($hashtag->id);
-        }
+        Hashtag::saveHashtags($picture, Hashtag::parseHashtags($content), array());
 
         $this->flash->addMessage('success', 'Comment added successfully!');
         return $response->withRedirect($this->router->pathFor('home'));
@@ -128,6 +116,8 @@ class SocialController extends Controller
             $this->flash->addMessage('error', 'This comment does not belong to you!');
             return $response->withRedirect($this->router->pathFor('home'));
         }
+
+        Hashtag::saveHashtags($comment->picture, array(), Hashtag::parseHashtags($comment->content));
 
         $comment->delete();
 

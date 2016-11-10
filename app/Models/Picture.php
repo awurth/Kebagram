@@ -45,6 +45,6 @@ class Picture extends Model
 
     public function hashtags()
     {
-        return $this->belongsToMany('App\Models\Hashtag');
+        return $this->belongsToMany('App\Models\Hashtag')->withPivot('count');
     }
 }

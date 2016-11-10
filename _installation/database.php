@@ -22,6 +22,8 @@ Manager::schema()->dropIfExists('users');
 
 Manager::schema()->create('users', function (Blueprint $table) {
     $table->increments('user_id');
+    $table->string('location')->nullable();
+    $table->string('description')->nullable();
     $table->string('session_id', 48)->nullable();
     $table->string('user_name', 64)->unique();
     $table->string('user_slug', 64)->unique();
@@ -89,6 +91,7 @@ Manager::schema()->create('hashtag', function (Blueprint $table) {
 Manager::schema()->create('hashtag_picture', function (Blueprint $table) {
     $table->integer('hashtag_id')->unsigned();
     $table->integer('picture_id')->unsigned();
+    $table->integer('count')->default(1);
     $table->primary(['hashtag_id', 'picture_id']);
     $table->foreign('hashtag_id')->references('id')->on('hashtag');
     $table->foreign('picture_id')->references('id')->on('picture');
