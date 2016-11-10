@@ -89,6 +89,7 @@ Manager::schema()->create('hashtag', function (Blueprint $table) {
 Manager::schema()->create('hashtag_picture', function (Blueprint $table) {
     $table->integer('hashtag_id')->unsigned();
     $table->integer('picture_id')->unsigned();
+    $table->integer('count')->default(1);
     $table->primary(['hashtag_id', 'picture_id']);
     $table->foreign('hashtag_id')->references('id')->on('hashtag');
     $table->foreign('picture_id')->references('id')->on('picture');
