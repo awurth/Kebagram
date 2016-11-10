@@ -2,16 +2,12 @@
 
 namespace App\Controllers;
 
-use App\Auth\Auth;
-use App\Controllers\ProfileController;
 use App\Models\User;
-use App\Controllers\Controller;
+use Psr\Http\Message\ResponseInterface as Response;
 use Respect\Validation\Validator as v;
 
 class AuthController extends Controller
 {
-
-
     /**
     * Render sign-in page
     */
@@ -23,21 +19,16 @@ class AuthController extends Controller
     /**
     * Log out
     */
-        public function getSignOut($request, $response)
+    public function getSignOut($request, $response)
     {
         $this->auth->logout();
-
-        return $response->withRedirect($this->router->pathFor('home'));
+        return $this->redirect($response, 'home');
     }
 
     /**
     * Sign the user in with the provided credentials.
     *
-    * @param string $user_email
-    * @param string $user_password
-    * @param string reg
-    *
-    * @return bool
+    * @return Response
     */
     public function postSignIn($request, $response)
     {
@@ -52,7 +43,7 @@ class AuthController extends Controller
         * If the fields fail, then redirect back to signup
         */
         if ($validation->failed()) {
-            return $response->withRedirect($this->router->pathFor('auth.signin'));
+            return $this->redirect($response, 'home');
         }
 
         $auth = $this->auth->attempt(
@@ -62,11 +53,11 @@ class AuthController extends Controller
 
         if (!$auth) {
             $this->flash->addMessage('error', 'Could not sign you in with those details.');
-            return $response->withRedirect($this->router->pathFor('auth.signin'));
+            return $this->redirect($response, 'home');
         }
 
         // If Auth successfull, then redirect to choosen location
-        return $response->withRedirect($this->router->pathFor('home'));
+        return $this->redirect($response, 'home');
     }
 
     /**
@@ -80,11 +71,6 @@ class AuthController extends Controller
 
     /**
     * Register a new user
-    *
-    * @param string $user_name
-    * @param string $user_email
-    * @param string $user_password
-    * @param string reg
     *
     * @return bool
     */
@@ -107,7 +93,7 @@ class AuthController extends Controller
         * If the fields fail, then redirect back to signup
         */
         if ($validation->failed()) {
-            return $response->withRedirect($this->router->pathFor('auth.signup'));
+            return $this->redirect($response, 'home');
         }
 
         /**
@@ -124,7 +110,7 @@ class AuthController extends Controller
             /** Add a flas message that everything went ok **/
             $this->flash->addMessage('success', 'You have been signed up!');
 
-            return $response->withRedirect($this->router->pathFor('home'));
+            return $this->redirect($response, 'home');
         }
         return false;
     }
@@ -158,23 +144,21 @@ class AuthController extends Controller
                             $user->user_password_hash = password_hash($mdp, PASSWORD_DEFAULT);
                             $user->save();
                             $this->flash->addMessage('success', 'Success');
-                            return $response->withRedirect($this->router->pathFor('auth.signin'));
+                            return $this->redirect($response, 'auth.signin');
                         }else{
                             $this->flash->addMessage('error', 'Error, Passwords do not match');
-                            return $response->withRedirect($this->router->pathFor('auth.forgotpassword'));
+                            return $this->redirect($response, 'auth.forgotpassword');
                         }
                     }
                 }
                 $this->flash->addMessage('error', 'Error, The user does not exist');
-                return $response->withRedirect($this->router->pathFor('auth.forgotpassword'));
+                return $this->redirect($response, 'auth.forgotpassword');
             }else{
                 $this->flash->addMessage('error', 'Error, Tout les champs doivent etre remplis');
-                return $response->withRedirect($this->router->pathFor('auth.forgotpassword'));
+                return $this->redirect($response, 'auth.forgotpassword');
             }
 
         }
         return $this->view->render($response, 'auth/password/forgot.twig');
     }
-
-
 }
