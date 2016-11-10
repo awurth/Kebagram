@@ -55,6 +55,14 @@ class Hashtag extends Model
         }
     }
 
+    public static function parseHashtags($text)
+    {
+        $tags = array();
+        preg_match_all('/#(\w+)/', $text, $tags);
+
+        return $tags[1];
+    }
+
     public function pictures()
     {
         return $this->belongsToMany('App\Models\Picture')->withPivot('count');
