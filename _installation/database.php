@@ -22,6 +22,8 @@ Manager::schema()->dropIfExists('users');
 
 Manager::schema()->create('users', function (Blueprint $table) {
     $table->increments('user_id');
+    $table->string('location')->nullable();
+    $table->string('description')->nullable();
     $table->string('session_id', 48)->nullable();
     $table->string('user_name', 64)->unique();
     $table->string('user_slug', 64)->unique();
