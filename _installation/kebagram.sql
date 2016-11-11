@@ -125,6 +125,8 @@ CREATE TABLE `users` (
   `user_profile` tinyint(1) NOT NULL DEFAULT '1',
   `user_password_reset_hash` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `user_password_reset_timestamp` bigint(20) DEFAULT NULL,
+  `location` varchar(80) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `description` varchar(150) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
