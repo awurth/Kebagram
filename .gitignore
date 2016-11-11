@@ -5,6 +5,6 @@ cache/*
 public/uploads/images/kebabs/*
 public/uploads/images/users/*
 !public/uploads/images/kebabs/.gitkeep
-!public/uploads/images/kebabs/.gitkeep
+!public/uploads/images/users/.gitkeep
 *.ini
 .DS_Store

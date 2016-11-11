@@ -5,17 +5,27 @@
     height: 200px;
     background-size:cover;
     border-radius: 50%;
+    -webkit-transition: all 0.4s ease-in-out;
+    -moz-transition: all 0.4s  ease-in-out;
+    -o-transition: all 0.4s  ease-in-out;
+    transition: all 0.4s  ease-in-out;
 }
 
 .avatar-edit:hover{
-    opacity: 0.6;
+
+    -webkit-filter: grayscale(1);
+    filter: grayscale(1);
+    -webkit-transition: all 0.4s ease-in-out;
+    -moz-transition: all 0.4s  ease-in-out;
+    -o-transition: all 0.4s  ease-in-out;
+    transition: all 0.4s  ease-in-out;
     cursor: pointer;
 }
 
 .avatar-edit:hover:before{
     content: '\e8fc';
     font-family: 'Material Icons';
-    color: white;
+    color: rgb(245, 245, 245);
     font-size:42px;
     margin-left: 40%;
     vertical-align:middle;
