@@ -30,7 +30,14 @@ $ cp db.config.ini.dist db.config.ini
 
 Now you can edit db.config.ini and add your database configuration
 
-### Credits :
+### 5. Create tables
+Execute the following command in a terminal:
+```
+$ php _installation/database.php
+```
+or import `_installation/kebagram.sql` in your database manager
+
+## Credits :
 - Maxence ANTOINE 
 - Xavier CHOPIN
 - Alexis WURTH
