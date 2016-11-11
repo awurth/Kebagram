@@ -80,12 +80,15 @@
                                                          {% if picture.pictureRating.empty() %}
                                                              <input type="hidden" name="what" value="like"/>
                                                              <a href="#" onclick="$(this).closest('form').submit()"
-                                                                title="Looks good!"><i class="material-icons">favorite_border</i></a>
+                                                                title="Looks good!"><i class="material-icons">favorite_border</i> </a>
                                                          {% else %}
                                                              <input type="hidden" name="what" value="dislike"/>
                                                              <a href="#" onclick="$(this).closest('form').submit()"
                                                                 title="I don't like it anymore"><i style="color:red;"
                                                                                                    class="material-icons">favorite</i></a>
+                                                         {% endif %}
+                                                         {% if picture.getRate() > 0 %}
+                                                            {{ picture.getRate() }}
                                                          {% endif %}
                                                          {% if picture.user.user_id == auth.user.user_id %}
                                                              <a href="{{ path_for('picture.edit', {'id': picture.id}) }}" title="Edit">
@@ -97,6 +100,7 @@
                                                          {% endif %}
                                                      </form>
                                                 </span>
+
                                                             <hr>
                                                             <p class="photo-description">{{ picture.description|hashtag|mentions }}</p>
                                                         </div>
