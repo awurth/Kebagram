@@ -1,6 +1,7 @@
 vendor/*
 log/*
 cache/*
+!cache/twig/.gitkeep
 !cache/.gitkeep
 public/uploads/images/kebabs/*
 public/uploads/images/users/*
