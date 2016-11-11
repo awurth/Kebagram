@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 10, 2016 at 08:07 AM
+-- Generation Time: Nov 11, 2016 at 10:13 PM
 -- Server version: 5.7.16-0ubuntu0.16.04.1
 -- PHP Version: 7.0.8-0ubuntu0.16.04.3
 
@@ -56,7 +56,8 @@ CREATE TABLE `hashtag` (
 
 CREATE TABLE `hashtag_picture` (
   `hashtag_id` int(10) UNSIGNED NOT NULL,
-  `picture_id` int(10) UNSIGNED NOT NULL
+  `picture_id` int(10) UNSIGNED NOT NULL,
+  `count` int(11) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -68,7 +69,7 @@ CREATE TABLE `hashtag_picture` (
 CREATE TABLE `picture` (
   `id` int(10) UNSIGNED NOT NULL,
   `description` text COLLATE utf8_unicode_ci NOT NULL,
-  `location` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `location` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `user_id` int(10) UNSIGNED NOT NULL
@@ -107,6 +108,8 @@ CREATE TABLE `subscription` (
 
 CREATE TABLE `users` (
   `user_id` int(10) UNSIGNED NOT NULL,
+  `location` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `session_id` varchar(48) COLLATE utf8_unicode_ci DEFAULT NULL,
   `user_name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
   `user_slug` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
@@ -128,10 +131,6 @@ CREATE TABLE `users` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Indexes for dumped tables
---
 
 --
 -- Indexes for table `comment`
@@ -193,17 +192,17 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `comment`
 --
 ALTER TABLE `comment`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `hashtag`
 --
 ALTER TABLE `hashtag`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `picture`
 --
 ALTER TABLE `picture`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 --
 -- AUTO_INCREMENT for table `picture_rating`
 --
