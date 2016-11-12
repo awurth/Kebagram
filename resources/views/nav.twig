@@ -11,14 +11,14 @@
         <div class="navbar-collapse collapse navbar-warning-collapse">
             <ul class="nav navbar-nav navbar-right">
                 {% if auth.check %}
-                    <li><a href="{{ path_for('picture.add') }}">Add picture</a></li>
+                    <li><a href="{{ path_for('picture.add') }}"><i class="material-icons md-18">add_a_photo</i> &nbsp; Add a picture</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ auth.user.user_name }} <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="{{ path_for('user.profile', {'slug': auth.user.user_slug}) }}">Your profile</a></li>
-                            <li><a href="{{ path_for('picture.add') }}">Add picture</a></li>
+                            <li><a href="{{ path_for('user.profile', {'slug': auth.user.user_slug}) }}"><i class="material-icons">person</i> My profile</a></li>
+                            <li><a href="{{ path_for('edit.account') }}"><i class="material-icons">settings</i> Edit my settings </a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="{{ path_for('auth.signout') }}"><i class="fa fa-sign-out"></i> Sign out</a></li>
+                            <li><a href="{{ path_for('auth.signout') }}"><i class="material-icons">power_settings_new</i> Sign out</a></li>
                         </ul>
                     </li>
                 {% else %}
@@ -28,7 +28,7 @@
             </ul>
             <form class="navbar-form navbar-right" action="{{ path_for('search') }}" method="GET">
                 <div class="form-group">
-                    <input class="form-control col-md-8" placeholder="Search" type="text" name="q">
+                    <i class="material-icons md-18">search</i> &nbsp; <input class="form-control col-md-8" placeholder="Search" type="text" name="q">
                 </div>
             </form>
         </div>
