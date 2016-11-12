@@ -72,7 +72,7 @@
                                                     </div>
                                                     <div class="col-lg-12">
                                                         <div class="social">
-                                                            <span class="auteur">{{ user.user_name }}</span>
+                                                            <span class="auteur"><i class="material-icons md-18">person_outline</i> {{ user.user_name }}</span>
                                                 <span class="pull-right">
                                                      <form action="{{ path_for('photo.like') }}" method="post">
                                                          {{ csrf.field | raw }}
@@ -92,11 +92,8 @@
                                                             {{ picture.getRate() }}
                                                          {% endif %}
                                                          {% if picture.user.user_id == auth.user.user_id %}
-                                                             <a href="{{ path_for('picture.edit', {'id': picture.id}) }}" title="Edit">
-                                                                 <i class="material-icons">edit</i>
-                                                             </a>
-                                                             <a href="{{ path_for('picture.delete', {'id': picture.id}) }}" title="Delete">
-                                                                 <i class="material-icons">delete</i>
+                                                             <a href="{{ path_for('picture.edit', {'id': picture.id}) }}" title="Edit"><i style="color:black;" class="material-icons md-18">edit</i></a>
+                                                             <a href="{{ path_for('picture.delete', {'id': picture.id}) }}" title="Delete"><i style="color:black;" class="material-icons md-18">delete</i>
                                                              </a>
                                                          {% endif %}
                                                      </form>
