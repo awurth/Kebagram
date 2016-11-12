@@ -1,6 +1,13 @@
 {% extends 'layout.twig' %}
 
 {% block body %}
+{% if posts.isEmpty %}
+    <div class="row">
+        <h4 class="text-center">Your timeline seems empty, you should follow some people by using the searchbar :-)</h4>
+        <br>
+        <h5 class="text-right">The Kebagram team</h5>
+    </div>
+{% endif %}
 
 {% for post in posts %}
     <div class="row">
