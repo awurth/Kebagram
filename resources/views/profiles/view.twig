@@ -44,7 +44,9 @@
                                     <li><strong>{{ following }}</strong> following</li>
                                 </ul>
                                 <div class="profile-desc">
-                                    <span class="profile-name">{{ user.location }}</span>
+                                    <span class="profile-name">
+                                        {% if user.location %}<i class="material-icons md-18">public</i>{% endif %}
+                                        {{ user.location }}</span>
                                     {{ user.description|hashtag|mentions }}
                                 </div>
                             </div>
@@ -84,8 +86,7 @@
                                                          {% else %}
                                                              <input type="hidden" name="what" value="dislike"/>
                                                              <a href="#" onclick="$(this).closest('form').submit()"
-                                                                title="I don't like it anymore"><i style="color:red;"
-                                                                                                   class="material-icons">favorite</i></a>
+                                                                title="I don't like it anymore"><i style="color:red;" class="material-icons">favorite</i></a>
                                                          {% endif %}
                                                          {% if picture.getRate() > 0 %}
                                                             {{ picture.getRate() }}
