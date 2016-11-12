@@ -30,6 +30,7 @@ class ProfileController extends Controller
 
         $pictures = $builder->get();
 
+
         $subscription = DB::table('subscription')
                         ->where('follower_id', $this->auth->user()->user_id)
                         ->where('followed_id', $user->user_id)

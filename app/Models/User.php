@@ -18,7 +18,7 @@ class User extends Model
 
     public function getAvatarPath()
     {
-        return file_exists(__DIR__ . '/../../public/uploads/images/users/' . $this->user_id . '.jpg') ? 'uploads/images/users/' . $this->user_id . '.jpg' : '';
+        return file_exists(__DIR__ . '/../../public/uploads/images/users/' . $this->user_id . '.jpg') ? 'uploads/images/users/' . $this->user_id . '.jpg' : 'images/default.png';
     }
 
     public function setPassword($password)

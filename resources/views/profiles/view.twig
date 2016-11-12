@@ -44,7 +44,9 @@
                                     <li><strong>{{ following }}</strong> following</li>
                                 </ul>
                                 <div class="profile-desc">
-                                    <span class="profile-name">{{ user.location }}</span>
+                                    <span class="profile-name">
+                                        {% if user.location %}<i class="material-icons md-18">public</i>{% endif %}
+                                        {{ user.location }}</span>
                                     {{ user.description|hashtag|mentions }}
                                 </div>
                             </div>
@@ -70,7 +72,7 @@
                                                     </div>
                                                     <div class="col-lg-12">
                                                         <div class="social">
-                                                            <span class="auteur">{{ user.user_name }}</span>
+                                                            <span class="auteur"><i class="material-icons md-18">person_outline</i> {{ user.user_name }}</span>
                                                 <span class="pull-right">
                                                      <form action="{{ path_for('photo.like') }}" method="post">
                                                          {{ csrf.field | raw }}
@@ -80,23 +82,23 @@
                                                          {% if picture.pictureRating.empty() %}
                                                              <input type="hidden" name="what" value="like"/>
                                                              <a href="#" onclick="$(this).closest('form').submit()"
-                                                                title="Looks good!"><i class="material-icons">favorite_border</i></a>
+                                                                title="Looks good!"><i class="material-icons">favorite_border</i> </a>
                                                          {% else %}
                                                              <input type="hidden" name="what" value="dislike"/>
                                                              <a href="#" onclick="$(this).closest('form').submit()"
-                                                                title="I don't like it anymore"><i style="color:red;"
-                                                                                                   class="material-icons">favorite</i></a>
+                                                                title="I don't like it anymore"><i style="color:red;" class="material-icons">favorite</i></a>
+                                                         {% endif %}
+                                                         {% if picture.getRate() > 0 %}
+                                                            {{ picture.getRate() }}
                                                          {% endif %}
                                                          {% if picture.user.user_id == auth.user.user_id %}
-                                                             <a href="{{ path_for('picture.edit', {'id': picture.id}) }}" title="Edit">
-                                                                 <i class="material-icons">edit</i>
-                                                             </a>
-                                                             <a href="{{ path_for('picture.delete', {'id': picture.id}) }}" title="Delete">
-                                                                 <i class="material-icons">delete</i>
+                                                             <a href="{{ path_for('picture.edit', {'id': picture.id}) }}" title="Edit"><i style="color:black;" class="material-icons md-18">edit</i></a>
+                                                             <a href="{{ path_for('picture.delete', {'id': picture.id}) }}" title="Delete"><i style="color:black;" class="material-icons md-18">delete</i>
                                                              </a>
                                                          {% endif %}
                                                      </form>
                                                 </span>
+
                                                             <hr>
                                                             <p class="photo-description">{{ picture.description|hashtag|mentions }}</p>
                                                         </div>

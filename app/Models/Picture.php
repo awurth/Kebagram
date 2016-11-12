@@ -24,7 +24,7 @@ class Picture extends Model
 
     public function getRate()
     {
-       $this->PictureRating()->count();
+       return $this->PictureRating()->count();
     }
 
     public function user()
