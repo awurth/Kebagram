@@ -14,18 +14,27 @@
                 {% endif %}
                 {% for user in users %}
                     <div class="list-group-item">
+
                         <div class="row-picture">
                             {% set avatar = user.getAvatarPath() %}
-                            {% if avatar %}
-                                <img class="circle" src="{{ base_url() }}/{{ avatar }}" alt="Avatar">
+                             <img class="circle pull-left" src="{{ base_url() }}/{{ avatar }}" alt="Avatar">
+
+                            {% if user.location %}
+                            </div>
+                            <div class="row-content">
+                                <h4 class="list-group-item-heading"><a href="{{ path_for('user.profile', {'slug': user.user_slug}) }}">{{ user.user_name }}</a></h4>
+                                <p class="list-group-item-text"><i class="material-icons md-18">public</i> <strong>{{ user.location }}</strong> &nbsp; &nbsp; <i class="material-icons md-18">comment</i> {{ user.description }}</p>
+                            </div>
+
                             {% else %}
-                                <img class="circle" src="http://placehold.it/100x100" alt="Avatar">
+                                <a style="vertical-align: middle; line-height:50px; padding-left: 1em; font-size:20px;" href="{{ path_for('user.profile', {'slug': user.user_slug}) }}">{{ user.user_name }}</a>
+                            </div>
                             {% endif %}
-                        </div>
-                        <div class="row-content">
-                            <h4 class="list-group-item-heading"><a href="{{ path_for('user.profile', {'slug': user.user_slug}) }}">{{ user.user_name }}</a></h4>
-                            <p class="list-group-item-text"><strong>Firstname</strong> Lorem ipsum dolor sit amet</p>
-                        </div>
+
+
+
+
+
                         {% if not loop.last %}
                             <div class="list-group-separator"></div>
                         {% endif %}
