@@ -8,6 +8,7 @@
     * Searching users
     * Hashtags, mentions
     * Comments
+    * SQL Conception
     
 * [Xavier Chopin](https://github.com/xchopin)
     * Profile edition
@@ -15,6 +16,7 @@
     * Account deletion
     * Picture rating
     * Design
+    * SQL Conception
     
 * [Maxence Antoine](https://github.com/MaxAntoine)
     * Password recovery
