@@ -23,7 +23,7 @@
                             </div>
                             <div class="row-content">
                                 <h4 class="list-group-item-heading"><a href="{{ path_for('user.profile', {'slug': user.user_slug}) }}">{{ user.user_name }}</a></h4>
-                                <p class="list-group-item-text"><i class="material-icons md-18">public</i> <strong>{{ user.location }}</strong> &nbsp; &nbsp; <i class="material-icons md-18">comment</i> {{ user.description }}</p>
+                                <p class="list-group-item-text"><i class="material-icons md-18">public</i> <strong>{{ user.location }}</strong> &nbsp; &nbsp; <i class="material-icons md-18">comment</i> {{ user.description|hashtag|mentions }}</p>
                             </div>
 
                             {% else %}
