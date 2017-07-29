@@ -1,8 +1,8 @@
-# KEBAGRAM
+# Kebagram
 
-Web application shamefully inspired by Instagram, but this time for KEBABS !
+Bachelor of Computer Science project which goal was to create a image sharing website like Instagram, but only for sharing the most beautiful Kebabs.
 
-An idea of University of Lorraine / Florian Ferbach
+An idea of University of Lorraine / Florian Ferbach.
 
 ## Installation
 ### 1. Clone git repository
